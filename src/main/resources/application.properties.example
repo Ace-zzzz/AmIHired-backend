@@ -1,0 +1,5 @@
+spring.application.name=amIHired
+spring.datasource.url=CHANGE-ME
+spring.datasource.username=CHANGE-ME
+spring.datasource.password=CHANGE-ME
+server.port=8080
