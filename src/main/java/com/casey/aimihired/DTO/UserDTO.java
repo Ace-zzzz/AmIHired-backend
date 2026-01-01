@@ -10,7 +10,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UserRegistration {
+public class UserDTO {
     @JsonProperty("user_name")
     @NotBlank(message = "Username is required!")
     @Size(min = 8, max = 25, message = "Username should be between 8 and 25 characters")
