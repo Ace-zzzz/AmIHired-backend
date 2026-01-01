@@ -18,20 +18,20 @@ public class UserImpl implements UserService {
 
     // STORE USER TO DB
     @Override
-    public User storeUser(UserDTO user) {
-        try {
-            User object = new User();
-            
-            object.setEmail(user.getEmail());
-            object.setUserName(user.getUserName());
-            object.setPassword(user.getPassword());
+    public UserDTO storeUser(UserDTO user) {
+        User object = new User();
+        UserDTO response = new UserDTO();
+        
+        object.setEmail(user.getEmail());
+        object.setUserName(user.getUserName());
+        object.setPassword(user.getPassword());
+        
+        repo.save(object);
 
-            return repo.save(object);
-        } 
-        catch(Exception error) {
-            System.out.println("Huli ka " + error.getMessage());
+        response.setEmail(object.getEmail());
+        response.setUserName(object.getUserName());
+        response.setResponse("Successfully Created");
 
-            return null;
-        }
+        return response;
     }
 }

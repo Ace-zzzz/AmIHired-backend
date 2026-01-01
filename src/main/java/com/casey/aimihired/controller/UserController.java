@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.casey.aimihired.DTO.UserDTO;
-import com.casey.aimihired.models.User;
 import com.casey.aimihired.service.UserService;
 
 import jakarta.validation.Valid;
@@ -24,8 +23,8 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<User> registerUser(@Valid @RequestBody UserDTO user) {
-        User createdUser = service.storeUser(user);
+    public ResponseEntity<UserDTO> registerUser(@Valid @RequestBody UserDTO user) {
+        UserDTO createdUser = service.storeUser(user);
         
         return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
     } 
