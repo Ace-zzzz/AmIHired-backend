@@ -31,7 +31,7 @@ public class SuccessfullyUserRegistration {
 
     @Test
     void storeUser_ShouldVerifyHashedPasswordInDatabase() {
-        // --- 1. ARRANGE ---
+        // --- 1. ARRANGE ----
         UserDTO inputDto = new UserDTO();
         inputDto.setUserName("junior_dev");
         inputDto.setPassword("secret123");
