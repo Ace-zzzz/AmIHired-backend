@@ -22,9 +22,13 @@ public class UserImpl implements UserService {
     // STORE USER TO DB
     @Override
     public UserDTO storeUser(UserDTO user) {
+        if (!user.getPassword().equals(user.getConfirmPassword())) {
+            throw new IllegalArgumentException("Passwords do not match!");
+        }
+
         User object = new User();
         UserDTO response = new UserDTO();
-        
+
         // HASH PASSWORD
         String rawPassword = user.getPassword();
         String hashedPassword = encoder.encode(rawPassword);

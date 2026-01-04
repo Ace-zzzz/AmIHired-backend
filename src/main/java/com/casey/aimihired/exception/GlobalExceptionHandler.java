@@ -39,4 +39,15 @@ public class GlobalExceptionHandler {
         
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    // 4. Handle Business Logic Errors (e.g., passwords don't match)
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<Map<String, String>> handleBusinessLogicErrors(IllegalArgumentException ex) {
+        Map<String, String> error = new HashMap<>();
+        
+        // ex.getMessage() will contain "Passwords do not match!" from your Service
+        error.put("error", ex.getMessage()); 
+        
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
 }

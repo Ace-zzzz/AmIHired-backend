@@ -35,10 +35,15 @@ public class SuccessfullyUserRegistration {
         UserDTO inputDto = new UserDTO();
         inputDto.setUserName("junior_dev");
         inputDto.setPassword("secret123");
+        inputDto.setConfirmPassword("secret123");
         inputDto.setEmail("dev@test.com");
 
         when(encoder.encode("secret123")).thenReturn("hashed_123");
 
+        if (!inputDto.getPassword().equals(inputDto.getConfirmPassword())) {
+            throw new RuntimeException("Password is not match");
+        }
+        
         // --- 2. ACT ---
         userService.storeUser(inputDto);
 

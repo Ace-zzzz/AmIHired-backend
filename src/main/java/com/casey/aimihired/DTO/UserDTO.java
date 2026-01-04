@@ -23,6 +23,11 @@ public class UserDTO {
     @Size(min = 8, message = "Password should be at least 8 characters")
     private String password;
 
+    @NotBlank(message = "Password Confirmation is required!")
+    @JsonProperty(value = "confirm_password", access = JsonProperty.Access.WRITE_ONLY)
+    @Size(min = 8, message = "Password Confirmation should be at least 8 characters")
+    private String confirmPassword;
+
     @Email
     @NotBlank(message = "Email is required!")
     private String email;
