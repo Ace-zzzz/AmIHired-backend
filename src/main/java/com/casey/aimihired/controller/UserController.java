@@ -32,7 +32,7 @@ public class UserController {
     } 
 
     @PostMapping("/change-password")
-    public ResponseEntity<ChangePasswordDTO> changePassword(@RequestBody ChangePasswordDTO newPassword) {
+    public ResponseEntity<ChangePasswordDTO> changePassword(@Valid @RequestBody ChangePasswordDTO newPassword) {
         Long id = 1L;
 
         ChangePasswordDTO response = service.changePassword(id, newPassword);
