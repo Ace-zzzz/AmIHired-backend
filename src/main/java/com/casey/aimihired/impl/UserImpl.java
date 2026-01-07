@@ -71,7 +71,8 @@ public class UserImpl implements UserService {
 
         // UPDATE THE PASSWORD
         user.setPassword(encoder.encode(newPassword.getNewPassword()));
-
+        repo.save(user);
+        
         ChangePasswordDTO response = new ChangePasswordDTO("Successfully Changed Password");
 
         return response;
