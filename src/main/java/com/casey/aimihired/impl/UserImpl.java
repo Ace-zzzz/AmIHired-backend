@@ -3,6 +3,7 @@ package com.casey.aimihired.impl;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.casey.aimihired.DTO.ChangePasswordDTO;
 import com.casey.aimihired.DTO.UserDTO;
 import com.casey.aimihired.models.User;
 import com.casey.aimihired.repo.UserRepo;
@@ -45,6 +46,32 @@ public class UserImpl implements UserService {
         response.setEmail(object.getEmail());
         response.setUserName(object.getUserName());
         response.setResponse("Successfully Created");
+
+        return response;
+    }
+
+    // CHANGE USER PASSWORD
+    @Override
+    public ChangePasswordDTO changePassword(Long userId, ChangePasswordDTO newPassword) {
+        // FETCH USER FROM DB
+        User user = repo.findById(userId).orElseThrow(
+            () -> new IllegalArgumentException("User not found")
+        );
+
+        // VALIDATES IF CURRENT PASSWORD IS CORRECT
+        if (!encoder.matches(newPassword.getCurrentPassword(), user.getPassword())) {
+            throw new IllegalArgumentException("Current Password is wrong");
+        }
+
+        // VALIDATES IF NEW PASSWORD AND CONFIRM PASSWORD IS MATCH
+        if (!newPassword.getNewPassword().equals(newPassword.getConfirmPassword())) {
+            throw new IllegalArgumentException("Mismatch Password");
+        }
+
+        // UPDATE THE PASSWORD
+        user.setPassword(encoder.encode(newPassword.getNewPassword()));
+
+        ChangePasswordDTO response = new ChangePasswordDTO("Successfully Changed Password");
 
         return response;
     }
