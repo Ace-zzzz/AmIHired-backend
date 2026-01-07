@@ -4,6 +4,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.casey.aimihired.DTO.ChangePasswordDTO;
+import com.casey.aimihired.DTO.UpdateUserNameDTO;
 import com.casey.aimihired.DTO.UserDTO;
 import com.casey.aimihired.models.User;
 import com.casey.aimihired.repo.UserRepo;
@@ -72,6 +73,23 @@ public class UserImpl implements UserService {
         user.setPassword(encoder.encode(newPassword.getNewPassword()));
 
         ChangePasswordDTO response = new ChangePasswordDTO("Successfully Changed Password");
+
+        return response;
+    }
+
+    // UPDATE USERNAME
+    @Override
+    public UpdateUserNameDTO updateUserName(Long userId, UpdateUserNameDTO newUserName) {
+        // FETCH USER FROM DB
+        User user = repo.findById(userId).orElseThrow(
+            () -> new IllegalArgumentException("User not found")
+        );
+
+        // UPDATE USERNAME
+        user.setUserName(newUserName.getUserName());
+        repo.save(user);
+        
+        UpdateUserNameDTO response = new UpdateUserNameDTO("Successfully updated Username");
 
         return response;
     }

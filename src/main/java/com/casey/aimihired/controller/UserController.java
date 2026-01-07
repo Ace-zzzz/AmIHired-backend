@@ -1,6 +1,5 @@
 package com.casey.aimihired.controller;
 
-import org.apache.catalina.connector.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -9,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.casey.aimihired.DTO.ChangePasswordDTO;
+import com.casey.aimihired.DTO.UpdateUserNameDTO;
 import com.casey.aimihired.DTO.UserDTO;
 import com.casey.aimihired.service.UserService;
 
@@ -39,5 +39,14 @@ public class UserController {
 
         return ResponseEntity.ok(response);
     }
+
+    @PostMapping("/update-username")
+    public ResponseEntity<UpdateUserNameDTO> updateUserName(@Valid @RequestBody UpdateUserNameDTO newUserName) {
+        Long id = 1L;
+        
+        UpdateUserNameDTO response = service.updateUserName(id, newUserName);
+
+        return ResponseEntity.ok(response);
+    } 
     
 }
