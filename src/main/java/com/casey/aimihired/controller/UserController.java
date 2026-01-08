@@ -3,6 +3,7 @@ package com.casey.aimihired.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,20 +32,20 @@ public class UserController {
         return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
     } 
 
-    @PostMapping("/change-password")
-    public ResponseEntity<ChangePasswordDTO> changePassword(@Valid @RequestBody ChangePasswordDTO newPassword) {
+    @PutMapping("/update-password")
+    public ResponseEntity<ChangePasswordDTO> changePassword(@Valid @RequestBody ChangePasswordDTO changePasswordRequest) {
         Long id = 2L;
 
-        ChangePasswordDTO response = service.changePassword(id, newPassword);
+        ChangePasswordDTO response = service.changePassword(id, changePasswordRequest);
 
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/update-username")
-    public ResponseEntity<UpdateUserNameDTO> updateUserName(@Valid @RequestBody UpdateUserNameDTO newUserName) {
-        Long id = 1L;
+    @PutMapping("/update-username")
+    public ResponseEntity<UpdateUserNameDTO> updateUserName(@Valid @RequestBody UpdateUserNameDTO newUsernameRequest) {
+        Long id = 2L;
         
-        UpdateUserNameDTO response = service.updateUserName(id, newUserName);
+        UpdateUserNameDTO response = service.updateUserName(id, newUsernameRequest);
 
         return ResponseEntity.ok(response);
     } 

@@ -1,5 +1,7 @@
 package com.casey.aimihired.exception;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -11,6 +13,8 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     // 1. Handle Validation Errors (e.g., password too short)
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -34,6 +38,9 @@ public class GlobalExceptionHandler {
     // 3. Catch-all for everything else (The 500 safety net)
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, String>> handleGeneralErrors(Exception ex) {
+        // Log the actual error for debugging purposes
+        logger.error("Unexpected error occurred: ", ex);
+        
         Map<String, String> error = new HashMap<>();
         error.put("error", "Something went wrong on our end.");
         

@@ -6,6 +6,6 @@ import com.casey.aimihired.DTO.UserDTO;
 
 public interface UserService {
     public UserDTO storeUser(UserDTO user); 
-    public ChangePasswordDTO changePassword(Long userId, ChangePasswordDTO newPassword);
-    public UpdateUserNameDTO updateUserName(Long userId, UpdateUserNameDTO newPassword);
+    public ChangePasswordDTO changePassword(Long userId, ChangePasswordDTO changePasswordRequest);
+    public UpdateUserNameDTO updateUserName(Long userId, UpdateUserNameDTO newUsernameRequest);
 }

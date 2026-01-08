@@ -33,7 +33,7 @@ public class SuccessfullyUpdateUser {
     private UserImpl service;
 
     @Test
-    void channgeUserPassword() {
+    void changeUserPassword() {
         // ARRANGE
         Long id = 1L;
         User user = new User();

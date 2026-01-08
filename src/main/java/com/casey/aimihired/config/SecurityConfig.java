@@ -9,12 +9,12 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 public class SecurityConfig {
-    // CHECK WHICH URL NEEDS AN AUTHORIZATION AND WHICH IS DONT 
+    // CHECK WHICH URLS NEED AUTHORIZATION AND WHICH DON'T
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         http.csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/v1/users/**").permitAll()
+                .requestMatchers("/api/v1/users/register").permitAll()
                 .anyRequest().authenticated()
             );
 

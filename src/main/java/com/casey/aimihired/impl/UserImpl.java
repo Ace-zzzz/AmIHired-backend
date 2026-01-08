@@ -43,8 +43,8 @@ public class UserImpl implements UserService {
         repo.save(entity);
 
         // CREATE JSON RESPONSE
-        response.setEmail(entity.getEmail().trim());
-        response.setUserName(entity.getUserName().trim());
+        response.setEmail(entity.getEmail());
+        response.setUserName(entity.getUserName());
         response.setResponse("Successfully Created");
 
         return response;
@@ -52,24 +52,24 @@ public class UserImpl implements UserService {
 
     // CHANGE USER PASSWORD
     @Override
-    public ChangePasswordDTO changePassword(Long userId, ChangePasswordDTO newPassword) {
+    public ChangePasswordDTO changePassword(Long userId, ChangePasswordDTO changePasswordRequest) {
         // FETCH USER FROM DB
         User user = repo.findById(userId).orElseThrow(
             () -> new IllegalArgumentException("User not found")
         );
 
         // VALIDATES IF CURRENT PASSWORD IS CORRECT
-        if (!encoder.matches(newPassword.getCurrentPassword(), user.getPassword())) {
+        if (!encoder.matches(changePasswordRequest.getCurrentPassword(), user.getPassword())) {
             throw new IllegalArgumentException("Current Password is wrong");
         }
 
         // VALIDATES IF NEW PASSWORD AND CONFIRM PASSWORD IS MATCH
-        if (!newPassword.getNewPassword().equals(newPassword.getConfirmPassword())) {
+        if (!changePasswordRequest.getNewPassword().equals(changePasswordRequest.getConfirmPassword())) {
             throw new IllegalArgumentException("Mismatch Password");
         }
 
         // UPDATE THE PASSWORD
-        user.setPassword(encoder.encode(newPassword.getNewPassword()));
+        user.setPassword(encoder.encode(changePasswordRequest.getNewPassword()));
         repo.save(user);
         
         ChangePasswordDTO response = new ChangePasswordDTO("Successfully Changed Password");
@@ -79,14 +79,14 @@ public class UserImpl implements UserService {
 
     // UPDATE USERNAME
     @Override
-    public UpdateUserNameDTO updateUserName(Long userId, UpdateUserNameDTO newUserName) {
+    public UpdateUserNameDTO updateUserName(Long userId, UpdateUserNameDTO newUsernameRequest) {
         // FETCH USER FROM DB
         User user = repo.findById(userId).orElseThrow(
             () -> new IllegalArgumentException("User not found")
         );
 
         // UPDATE USERNAME
-        user.setUserName(newUserName.getUserName().trim());
+        user.setUserName(newUsernameRequest.getUserName().trim());
         repo.save(user);
         
         UpdateUserNameDTO response = new UpdateUserNameDTO("Successfully updated Username");
