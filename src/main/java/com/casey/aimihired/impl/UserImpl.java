@@ -28,24 +28,23 @@ public class UserImpl implements UserService {
             throw new IllegalArgumentException("Passwords do not match!");
         }
 
-        User object = new User();
+        User entity = new User();
         UserDTO response = new UserDTO();
 
         // HASH PASSWORD
-        String rawPassword = user.getPassword();
-        String hashedPassword = encoder.encode(rawPassword);
+        String hashedPassword = encoder.encode(user.getPassword());
 
         // SET USER FIELDS
-        object.setEmail(user.getEmail());
-        object.setUserName(user.getUserName());
-        object.setPassword(hashedPassword);
+        entity.setEmail(user.getEmail().trim());
+        entity.setUserName(user.getUserName().trim());
+        entity.setPassword(hashedPassword);
         
         // SAVE
-        repo.save(object);
+        repo.save(entity);
 
         // CREATE JSON RESPONSE
-        response.setEmail(object.getEmail());
-        response.setUserName(object.getUserName());
+        response.setEmail(entity.getEmail().trim());
+        response.setUserName(entity.getUserName().trim());
         response.setResponse("Successfully Created");
 
         return response;
@@ -87,7 +86,7 @@ public class UserImpl implements UserService {
         );
 
         // UPDATE USERNAME
-        user.setUserName(newUserName.getUserName());
+        user.setUserName(newUserName.getUserName().trim());
         repo.save(user);
         
         UpdateUserNameDTO response = new UpdateUserNameDTO("Successfully updated Username");

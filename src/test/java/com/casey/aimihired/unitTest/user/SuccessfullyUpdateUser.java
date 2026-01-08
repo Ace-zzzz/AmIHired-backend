@@ -55,6 +55,8 @@ public class SuccessfullyUpdateUser {
 
         assertNotEquals(dto.getNewPassword(), "newPassword123");
         assertEquals("Successfully Changed Password", response.getResponse());
+
+        verify(repo, times(1)).save(user);
     }
 
     @Test
