@@ -49,7 +49,7 @@ public class UpdateUserTest {
 
         /**
          * VERIFIES THAT THE PASSWORD 
-         * DID NOT ENCYPTED IN THE FIRST PLACE
+         * DID NOT ENCRYPTED IN THE FIRST PLACE
          **/ 
         verifyNoInteractions(encoder);
 

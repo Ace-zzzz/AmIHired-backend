@@ -51,7 +51,7 @@ public class UserRegistrationTest {
 
         /**
          * VERIFY THAT THE USER DIDN'T SAVE ON THE DB
-         * AND PASSWORD DIDN'T GET ENCYPTED AS IT SHOULD
+         * AND PASSWORD DIDN'T GET ENCRYPTED AS IT SHOULD
          * **/
         verifyNoInteractions(encoder);
         verifyNoInteractions(repo);
@@ -63,7 +63,7 @@ public class UserRegistrationTest {
     // TEST FOR SAVING THE USER TO DB
     @Test
     void storeUser_ShouldHashedPasswordAndSaveToDB() {
-        // ARRAGE
+        // ARRANGE
         UserDTO userDTO = new UserDTO();
 
         userDTO.setEmail("test@gmail.com");
@@ -76,7 +76,7 @@ public class UserRegistrationTest {
         // ACT
         UserDTO response = userService.storeUser(userDTO);
 
-        // VERIFIES THAT THE PASSWORD GOT ENCYPTED
+        // VERIFIES THAT THE PASSWORD GOT ENCRYPTED
         verify(encoder, times(1)).encode(userDTO.getPassword());
 
         // GET THE ACTUAL USER THAT SAVED INTO DB

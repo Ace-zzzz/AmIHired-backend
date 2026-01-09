@@ -65,7 +65,7 @@ public class UserImpl implements UserService {
 
         // VALIDATES IF NEW PASSWORD AND CONFIRM PASSWORD IS MATCH
         if (!changePasswordRequest.getNewPassword().equals(changePasswordRequest.getConfirmPassword())) {
-            throw new IllegalArgumentException("Mismatch Password");
+            throw new IllegalArgumentException("Passwords do not match!");
         }
 
         // UPDATE THE PASSWORD
