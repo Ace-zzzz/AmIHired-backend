@@ -1,24 +1,33 @@
 package com.casey.aimihired.impl;
 
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.casey.aimihired.DTO.ChangePasswordDTO;
+import com.casey.aimihired.DTO.LoginDTO;
 import com.casey.aimihired.DTO.UpdateUserNameDTO;
 import com.casey.aimihired.DTO.UserDTO;
 import com.casey.aimihired.models.User;
 import com.casey.aimihired.repo.UserRepo;
+import com.casey.aimihired.security.JwtUtils;
 import com.casey.aimihired.service.UserService;
 
 @Service
 public class UserImpl implements UserService {
     private final UserRepo repo;
     private final PasswordEncoder encoder;
+    private final AuthenticationManager authManger;
+    private final JwtUtils jwtUtils;
 
     // DEPENDENCY INJECTION
-    public UserImpl(UserRepo repo, PasswordEncoder encoder) {
+    public UserImpl(UserRepo repo, PasswordEncoder encoder, AuthenticationManager authManger, JwtUtils jwtUtils) {
         this.repo    = repo;
         this.encoder = encoder;
+        this.authManger = authManger;
+        this.jwtUtils = jwtUtils;
     }
 
     // STORE USER TO DB
@@ -46,6 +55,29 @@ public class UserImpl implements UserService {
         response.setEmail(entity.getEmail());
         response.setUserName(entity.getUserName());
         response.setResponse("Successfully Created");
+
+        return response;
+    }
+
+    // LOGIN USER
+    @Override
+    public LoginDTO login(LoginDTO loginDTO) {
+        /**
+         * AUTHENTICATE USER VIA
+         * USERNAME AND PASSWORD
+         **/ 
+        Authentication auth = authManger.authenticate(
+            new UsernamePasswordAuthenticationToken(loginDTO.getUserName(), loginDTO.getPassword())
+        );
+
+        // GENERATES JWT
+        String token = jwtUtils.generateToken(auth.getName());
+
+        /**
+         * INSTANTIATE LOGIN 
+         * DTO FOR RESPONSE
+         **/ 
+        LoginDTO response = new LoginDTO(token);
 
         return response;
     }
