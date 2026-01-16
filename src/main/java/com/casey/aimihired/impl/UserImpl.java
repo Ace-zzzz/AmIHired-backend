@@ -19,14 +19,14 @@ import com.casey.aimihired.service.UserService;
 public class UserImpl implements UserService {
     private final UserRepo repo;
     private final PasswordEncoder encoder;
-    private final AuthenticationManager authManger;
+    private final AuthenticationManager authManager;
     private final JwtUtils jwtUtils;
 
     // DEPENDENCY INJECTION
-    public UserImpl(UserRepo repo, PasswordEncoder encoder, AuthenticationManager authManger, JwtUtils jwtUtils) {
+    public UserImpl(UserRepo repo, PasswordEncoder encoder, AuthenticationManager authManager, JwtUtils jwtUtils) {
         this.repo    = repo;
         this.encoder = encoder;
-        this.authManger = authManger;
+        this.authManager = authManager;
         this.jwtUtils = jwtUtils;
     }
 
@@ -66,7 +66,7 @@ public class UserImpl implements UserService {
          * AUTHENTICATE USER VIA
          * USERNAME AND PASSWORD
          **/ 
-        Authentication auth = authManger.authenticate(
+        Authentication auth = authManager.authenticate(
             new UsernamePasswordAuthenticationToken(loginDTO.getUserName(), loginDTO.getPassword())
         );
 

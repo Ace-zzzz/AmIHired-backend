@@ -22,7 +22,7 @@ public class JwtUtils {
     @Value("${app.jwt.expiration-ms}")
     private Long jwtExpiration;
 
-    // ALOGIRTHM USED
+    // ALGORITHM USED
     private SecretKey getSigningKey() {
         byte[] keyBytes = jwtSecretKey.getBytes(StandardCharsets.UTF_8);
         

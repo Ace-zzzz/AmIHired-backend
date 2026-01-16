@@ -22,7 +22,7 @@ import com.casey.aimihired.security.JwtUtils;
 @ExtendWith(MockitoExtension.class)
 public class LoginTest {
     @Mock
-    private AuthenticationManager authManger;
+    private AuthenticationManager authManager;
 
     @Mock
     private JwtUtils jwtUtils;
@@ -45,7 +45,7 @@ public class LoginTest {
          * MOCK AUTHENTICATION MANAGER CALL 
          * TO SIMULATE AUTHENTICATION
          **/
-        when(authManger.authenticate(
+        when(authManager.authenticate(
             new UsernamePasswordAuthenticationToken(loginDTO.getUserName(), loginDTO.getPassword())
         )).thenReturn(auth);
 
@@ -63,15 +63,15 @@ public class LoginTest {
 
         /**
          * VERIFIES THAT authenticate()
-         * IS CALLED EXACLY ONCE 
+         * IS CALLED EXACTLY ONCE 
          **/
-        verify(authManger, times(1)).authenticate(
-            new UsernamePasswordAuthenticationToken(loginDTO.getUserName(),loginDTO.getPassword())
+        verify(authManager, times(1)).authenticate(
+            new UsernamePasswordAuthenticationToken(loginDTO.getUserName(), loginDTO.getPassword())
         );
 
         /**
          * VERIFIES THAT generateToken()
-         * IS CALLED EXACLY ONCE 
+         * IS CALLED EXACTLY ONCE 
          **/
         verify(jwtUtils, times(1)).generateToken(loginDTO.getUserName());
     }

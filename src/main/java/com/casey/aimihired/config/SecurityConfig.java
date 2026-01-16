@@ -1,5 +1,7 @@
 package com.casey.aimihired.config;
 
+import javax.naming.AuthenticationException;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,14 +24,14 @@ public class SecurityConfig {
         this.jwtFilter = jwtFilter;
     }
 
-    // ENCRYPS PASSWORD
+    // ENCRYPTS PASSWORD
     @Bean
     public PasswordEncoder encoder() {
         return new BCryptPasswordEncoder();
     }
 
     @Bean
-    public AuthenticationManager authManager(AuthenticationConfiguration authConfig) {
+    public AuthenticationManager authManager(AuthenticationConfiguration authConfig) throws AuthenticationException {
         return authConfig.getAuthenticationManager();
     }
 
