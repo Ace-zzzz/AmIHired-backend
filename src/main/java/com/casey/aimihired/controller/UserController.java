@@ -9,11 +9,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.casey.aimihired.DTO.ChangePasswordDTO;
+import com.casey.aimihired.DTO.LoginDTO;
 import com.casey.aimihired.DTO.UpdateUserNameDTO;
 import com.casey.aimihired.DTO.UserDTO;
 import com.casey.aimihired.service.UserService;
 
 import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.GetMapping;
+
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -32,6 +35,14 @@ public class UserController {
         return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
     } 
 
+    @PostMapping("/login")
+    public ResponseEntity<LoginDTO> login(@Valid @RequestBody LoginDTO loginDTO) {
+        LoginDTO response = service.login(loginDTO);
+
+        return ResponseEntity.ok(response);
+    }
+    
+
     @PutMapping("/update-password")
     public ResponseEntity<ChangePasswordDTO> changePassword(@Valid @RequestBody ChangePasswordDTO changePasswordRequest) {
         Long id = 2L;
@@ -48,6 +59,12 @@ public class UserController {
         UpdateUserNameDTO response = service.updateUserName(id, newUsernameRequest);
 
         return ResponseEntity.ok(response);
-    } 
+    }
+
+    @GetMapping("/try")
+    public String tryLang() {
+        return "JWT WORKS!";
+    }
     
+
 }

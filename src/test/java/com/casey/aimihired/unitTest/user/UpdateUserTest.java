@@ -155,7 +155,7 @@ public class UpdateUserTest {
         verifyNoMoreInteractions(encoder);
 
         // ASSERT
-        assertEquals("Mismatch Password", exception.getMessage());
+        assertEquals("Passwords do not match!", exception.getMessage());
     }
 
     @Test
