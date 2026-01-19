@@ -1,7 +1,10 @@
 package com.casey.aimihired.impl;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
+import com.casey.aimihired.DTO.Job_application.GetJobDTO;
 import com.casey.aimihired.DTO.Job_application.JobDTO;
 import com.casey.aimihired.models.Job_application.Job;
 import com.casey.aimihired.repo.JobRepo;
@@ -34,5 +37,25 @@ public class JobImpl implements JobService{
         JobDTO response = new JobDTO("Successfully created");
 
         return response;
+    }
+
+    @Override
+    public List<GetJobDTO> getAll() {
+        return repo.findAll()
+                   .stream()
+                   .map(this::convertToDTO)
+                   .toList();
+    }
+
+    private GetJobDTO convertToDTO(Job job) {
+        GetJobDTO dto = new GetJobDTO();
+        dto.setId(job.getId());
+        dto.setPosition(job.getPosition());
+        dto.setCompany(job.getCompany());
+        dto.setWorkModel(job.getWorkModel());
+        dto.setStatus(job.getStatus());
+        dto.setJobURL(job.getJobURL());
+
+        return dto;
     }
 }
