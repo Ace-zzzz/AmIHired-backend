@@ -1,9 +1,13 @@
 package com.casey.aimihired.unitTest.job_application;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
+
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,6 +16,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.casey.aimihired.DTO.Job_application.GetJobDTO;
 import com.casey.aimihired.DTO.Job_application.JobDTO;
 import com.casey.aimihired.impl.JobImpl;
 import com.casey.aimihired.models.Job_application.Job;
@@ -45,14 +50,86 @@ public class JobTest {
          **/ 
         ArgumentCaptor<Job> job = ArgumentCaptor.forClass(Job.class);
 
-        // ASSERT
-        assertEquals("Successfully created", response.getResponse());
-
         /**
          * VERIFY THE REPO IS
          * CALLED EXACTLY ONCE
          **/
         verify(repo, times(1)).save(job.capture());
         verifyNoMoreInteractions(repo);
+
+        // ASSERT
+        assertEquals("Successfully created", response.getResponse());
+    }
+
+    @Test
+    void getAllJob_shouldReturnListOfJobs_ifTheresAny() {
+        // ACT
+        jobService.getAll();
+
+        /**
+         * VERIFY THE REPO IS
+         * CALLED EXACTLY ONCE
+         **/
+        verify(repo, times(1)).findAll();
+        verifyNoMoreInteractions(repo);
+    }
+
+    @Test
+    void getSingleJob_shouldReturnJob_ifJobExist() {
+        // ARRANGE
+        Long id = 1L;
+        
+        Job entity = new Job();
+        entity.setId(id);
+        entity.setPosition("testPosition");
+        entity.setCompany("testCompany");
+        entity.setWorkModel("testWorkModel");
+        entity.setStatus("testStatys");
+        entity.setJobURL("testJobURL");
+
+        /**
+         * MOCK REPOSITORY CALL 
+         * TO SIMULATE THE FINDING OF JOB BY ID
+         **/
+        when(repo.findById(id)).thenReturn(Optional.of(entity));
+        
+        // ACT
+        GetJobDTO result = jobService.get(entity.getId());
+
+        /**
+         * VERIFY THE REPO IS
+         * CALLED EXACTLY ONCE
+         **/
+        verify(repo, times(1)).findById(entity.getId());
+        verifyNoMoreInteractions(repo);
+        
+        // ASSERT
+        assertEquals(entity.getPosition(), result.getPosition());
+        assertEquals(entity.getCompany(), result.getCompany());
+        assertEquals(entity.getWorkModel(), result.getWorkModel());
+        assertEquals(entity.getStatus(), result.getStatus());
+        assertEquals(entity.getJobURL(), result.getJobURL());
+    }
+
+    @Test
+    void getSingleJob_shouldThrowException_ifJobDidNotExist() {
+        // ARRANGE
+        Long wrongId = 404L;
+        
+        // ACT
+        IllegalArgumentException exception = assertThrows(
+            IllegalArgumentException.class,
+            () -> jobService.get(wrongId)
+        );
+
+        /**
+         * VERIFY THE REPO IS
+         * CALLED EXACTLY ONCE
+         **/
+        verify(repo, times(1)).findById(wrongId);
+        verifyNoMoreInteractions(repo);
+
+        // ASSERT
+        assertEquals(exception.getMessage(), "Job with id " + wrongId + " is not found");
     }
 }
