@@ -20,6 +20,7 @@ public class JobImpl implements JobService{
     public JobDTO create(JobDTO dto) {
         // CREATE NEW JOB ENTITY
         Job entity = new Job();
+        
         entity.setPosition(dto.getPosition());
         entity.setCompany(dto.getCompany());
         entity.setWorkModel(dto.getWorkModel());
