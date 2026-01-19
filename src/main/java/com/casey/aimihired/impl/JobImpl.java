@@ -39,6 +39,7 @@ public class JobImpl implements JobService{
         return response;
     }
 
+    // GET ALL THE JOB
     @Override
     public List<GetJobDTO> getAll() {
         return repo.findAll()
@@ -47,6 +48,23 @@ public class JobImpl implements JobService{
                    .toList();
     }
 
+    // GET SINGLE JOB
+    public GetJobDTO get(Long id) {
+        /**
+         * THROWS EXCEPTION
+         * IF JOB NOT FOUND BY ID
+         **/
+        Job job = repo.findById(id).orElseThrow(
+            () -> new IllegalArgumentException("Job with id " + id + " is not found")
+        );
+
+        return convertToDTO(job);
+    }
+
+    /**
+     * CONVERTS ALL
+     * THE JOB INTO DTO 
+     **/
     private GetJobDTO convertToDTO(Job job) {
         GetJobDTO dto = new GetJobDTO();
         dto.setId(job.getId());
