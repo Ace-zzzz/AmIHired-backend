@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.casey.aimihired.DTO.Job_application.JobDTO;
 import com.casey.aimihired.service.JobService;
 
+import jakarta.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,7 +29,7 @@ public class JobController {
      * CREATING JOB ENTRY
      **/
     @PostMapping("/jobs")
-    public ResponseEntity<JobDTO> create(@RequestBody JobDTO dto) {
+    public ResponseEntity<JobDTO> create(@Valid @RequestBody JobDTO dto) {
         JobDTO response = service.create(dto);
         
         return new ResponseEntity<>(response, HttpStatus.CREATED);
