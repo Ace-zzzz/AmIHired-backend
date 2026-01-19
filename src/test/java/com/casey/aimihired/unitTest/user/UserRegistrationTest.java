@@ -15,8 +15,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.casey.aimihired.DTO.UserDTO;
 import com.casey.aimihired.models.User;
+import com.casey.aimihired.DTO.user.UserDTO;
 import com.casey.aimihired.impl.UserImpl;
 import com.casey.aimihired.repo.UserRepo;
 

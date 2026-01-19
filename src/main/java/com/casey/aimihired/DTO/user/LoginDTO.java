@@ -1,4 +1,4 @@
-package com.casey.aimihired.DTO;
+package com.casey.aimihired.DTO.user;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

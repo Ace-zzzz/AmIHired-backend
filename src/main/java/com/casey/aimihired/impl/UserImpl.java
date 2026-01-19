@@ -6,10 +6,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.casey.aimihired.DTO.ChangePasswordDTO;
-import com.casey.aimihired.DTO.LoginDTO;
-import com.casey.aimihired.DTO.UpdateUserNameDTO;
-import com.casey.aimihired.DTO.UserDTO;
+import com.casey.aimihired.DTO.user.ChangePasswordDTO;
+import com.casey.aimihired.DTO.user.LoginDTO;
+import com.casey.aimihired.DTO.user.UpdateUserNameDTO;
+import com.casey.aimihired.DTO.user.UserDTO;
 import com.casey.aimihired.models.User;
 import com.casey.aimihired.repo.UserRepo;
 import com.casey.aimihired.security.JwtUtils;

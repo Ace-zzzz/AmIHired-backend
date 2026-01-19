@@ -1,9 +1,9 @@
 package com.casey.aimihired.service;
 
-import com.casey.aimihired.DTO.ChangePasswordDTO;
-import com.casey.aimihired.DTO.LoginDTO;
-import com.casey.aimihired.DTO.UpdateUserNameDTO;
-import com.casey.aimihired.DTO.UserDTO;
+import com.casey.aimihired.DTO.user.ChangePasswordDTO;
+import com.casey.aimihired.DTO.user.LoginDTO;
+import com.casey.aimihired.DTO.user.UpdateUserNameDTO;
+import com.casey.aimihired.DTO.user.UserDTO;
 
 public interface UserService {
     public UserDTO storeUser(UserDTO user); 

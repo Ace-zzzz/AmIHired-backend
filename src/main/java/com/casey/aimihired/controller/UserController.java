@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.casey.aimihired.DTO.ChangePasswordDTO;
-import com.casey.aimihired.DTO.LoginDTO;
-import com.casey.aimihired.DTO.UpdateUserNameDTO;
-import com.casey.aimihired.DTO.UserDTO;
+import com.casey.aimihired.DTO.user.ChangePasswordDTO;
+import com.casey.aimihired.DTO.user.LoginDTO;
+import com.casey.aimihired.DTO.user.UpdateUserNameDTO;
+import com.casey.aimihired.DTO.user.UserDTO;
 import com.casey.aimihired.service.UserService;
 
 import jakarta.validation.Valid;
