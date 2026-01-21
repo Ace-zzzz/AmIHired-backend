@@ -15,12 +15,14 @@ import com.casey.aimihired.service.JobService;
 public class JobImpl implements JobService{
     private final JobRepo repo;
 
+    // DEPENDENCY INJECTION
     public JobImpl(JobRepo repo) {
         this.repo = repo;
     }
 
     // CREATES JOB ENTRY
     @Override
+    @Transactional
     public JobDTO create(JobDTO dto) {
         // CREATE NEW JOB ENTITY
         Job entity = new Job();
@@ -52,6 +54,7 @@ public class JobImpl implements JobService{
 
     // GET SINGLE JOB
     @Override
+    @Transactional(readOnly = true)
     public GetJobDTO get(Long id) {
         /**
          * THROWS EXCEPTION
