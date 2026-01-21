@@ -10,9 +10,11 @@ import com.casey.aimihired.service.JobService;
 import jakarta.validation.Valid;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -54,7 +56,7 @@ public class JobController {
 
     /**
      * ROUTE FOR
-     * FETCHING SIMGLE JOBS
+     * FETCHING SINGLE JOBS
      **/
     @GetMapping("/jobs/{id}")
     public ResponseEntity<GetJobDTO> get(@PathVariable Long id) {
@@ -65,13 +67,24 @@ public class JobController {
 
     /**
      * ROUTE FOR
-     * FETCHING SIMGLE JOBS
+     * UPDATING JOB
      **/
     @PutMapping("/jobs/{id}")
-    public ResponseEntity<JobDTO> get(@PathVariable Long id, @RequestBody JobDTO dto) {
+    public ResponseEntity<JobDTO> update(@PathVariable Long id, @RequestBody JobDTO dto) {
         JobDTO job = service.update(id, dto);
 
         return ResponseEntity.ok(job);
+    }
+
+    /**
+     * ROUTE FOR
+     * DELETING JOB ENTITY
+     **/
+    @DeleteMapping("/jobs/{id}")
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+        service.delete(id);
+
+        return ResponseEntity.ok(Map.of("message", "Job Deleted Successfully"));
     }
         
 }

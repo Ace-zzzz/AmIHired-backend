@@ -10,4 +10,5 @@ public interface JobService {
     public List<GetJobDTO> getAll();
     public GetJobDTO get(Long id);
     public JobDTO update(Long id, JobDTO dto);
+    public String delete(Long id);
 }

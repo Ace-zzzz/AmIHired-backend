@@ -83,9 +83,22 @@ public class JobImpl implements JobService{
          * STATE TRANSFER 
          * TO UPDATE FIELDS
          **/ 
-        updateJob(job, dto);
+        mapDtoToEntity(job, dto);
 
         return new JobDTO("Successfully updated");
+    }
+
+    // DELETES JOB
+    @Override
+    @Transactional
+    public String delete(Long id) {
+        Job job = repo.findById(id).orElseThrow(
+            () -> new IllegalArgumentException("Job with id " + id + " is not found")
+        );
+
+        repo.delete(job);
+
+        return "Successfully deleted";
     }
 
     /**
@@ -105,7 +118,7 @@ public class JobImpl implements JobService{
     }
 
     // UPDATES JOB ENTITY
-    private void updateJob(Job job, JobDTO dto) {
+    private void mapDtoToEntity(Job job, JobDTO dto) {
         job.setPosition(dto.getPosition());
         job.setCompany(dto.getCompany());
         job.setWorkModel(dto.getWorkModel());
