@@ -29,7 +29,7 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<ApiResponse> registerUser(@Valid @RequestBody UserDTO user) {
+    public ResponseEntity<ApiResponse> store(@Valid @RequestBody UserDTO user) {
         ApiResponse userObject = service.store(user);
         
         return ResponseEntity.status(HttpStatus.CREATED).body(userObject);

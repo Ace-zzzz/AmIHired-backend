@@ -28,6 +28,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;    
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column(unique = true, length = 25, nullable = false) 
     @NotBlank(message = "Username is required!")
     @Size(min = 8, max = 25, message = "Username should be between 8 and 25 characters")
@@ -40,6 +41,7 @@ public class User {
     private String password;
 
     @Email
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @NotBlank(message = "Email is required!")
     @Column(unique = true, length = 255)
     private String email;

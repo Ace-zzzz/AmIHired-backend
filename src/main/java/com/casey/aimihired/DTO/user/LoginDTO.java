@@ -9,7 +9,7 @@ import lombok.Setter;
 
 @Getter @Setter
 public class LoginDTO {
-    @JsonProperty("user_name")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @NotBlank(message = "Username is required!")
     @Size(min = 8, max = 25, message = "Username should be between 8 and 25 characters")
     private String username;
