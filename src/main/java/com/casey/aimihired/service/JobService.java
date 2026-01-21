@@ -9,4 +9,5 @@ public interface JobService {
     public JobDTO create(JobDTO dto);
     public List<GetJobDTO> getAll();
     public GetJobDTO get(Long id);
+    public JobDTO update(Long id, JobDTO dto);
 }

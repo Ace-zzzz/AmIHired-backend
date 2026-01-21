@@ -3,6 +3,7 @@ package com.casey.aimihired.impl;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.casey.aimihired.DTO.Job_application.GetJobDTO;
 import com.casey.aimihired.DTO.Job_application.JobDTO;
@@ -41,6 +42,7 @@ public class JobImpl implements JobService{
 
     // GET ALL THE JOB
     @Override
+    @Transactional(readOnly = true)
     public List<GetJobDTO> getAll() {
         return repo.findAll()
                    .stream()
@@ -49,6 +51,7 @@ public class JobImpl implements JobService{
     }
 
     // GET SINGLE JOB
+    @Override
     public GetJobDTO get(Long id) {
         /**
          * THROWS EXCEPTION
@@ -59,6 +62,27 @@ public class JobImpl implements JobService{
         );
 
         return convertToDTO(job);
+    }
+
+    // UPDATE JOB
+    @Override
+    @Transactional
+    public JobDTO update(Long id, JobDTO dto) {
+        /**
+         * THROWS EXCEPTION
+         * IF JOB NOT FOUND BY ID
+         **/
+        Job job = repo.findById(id).orElseThrow(
+            () -> new IllegalArgumentException("Job with id " + id + " is not found")
+        );
+
+        /**
+         * STATE TRANSFER 
+         * TO UPDATE FIELDS
+         **/ 
+        updateJob(job, dto);
+
+        return new JobDTO("Successfully updated");
     }
 
     /**
@@ -75,5 +99,14 @@ public class JobImpl implements JobService{
         dto.setJobURL(job.getJobURL());
 
         return dto;
+    }
+
+    // UPDATES JOB ENTITY
+    private void updateJob(Job job, JobDTO dto) {
+        job.setPosition(dto.getPosition());
+        job.setCompany(dto.getCompany());
+        job.setWorkModel(dto.getWorkModel());
+        job.setStatus(dto.getStatus());
+        job.setJobURL(dto.getJobURL());
     }
 }
