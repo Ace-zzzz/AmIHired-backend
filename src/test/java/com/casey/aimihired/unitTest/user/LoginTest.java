@@ -18,6 +18,7 @@ import org.springframework.security.core.Authentication;
 import com.casey.aimihired.DTO.user.LoginDTO;
 import com.casey.aimihired.impl.UserImpl;
 import com.casey.aimihired.security.JwtUtils;
+import com.casey.aimihired.util.ApiResponse;
 
 @ExtendWith(MockitoExtension.class)
 public class LoginTest {
@@ -56,10 +57,10 @@ public class LoginTest {
         when(jwtUtils.generateToken(loginDTO.getUserName())).thenReturn("xxxxx.yyyyy.zzzzz");
 
         // ACT
-        LoginDTO response = userService.login(loginDTO);
+        ApiResponse response = userService.login(loginDTO);
 
         // ASSERT
-        assertEquals("xxxxx.yyyyy.zzzzz", response.getResponse());
+        assertEquals("xxxxx.yyyyy.zzzzz", response.message());
 
         /**
          * VERIFIES THAT authenticate()

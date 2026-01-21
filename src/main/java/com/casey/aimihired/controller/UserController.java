@@ -13,9 +13,9 @@ import com.casey.aimihired.DTO.user.LoginDTO;
 import com.casey.aimihired.DTO.user.UpdateUserNameDTO;
 import com.casey.aimihired.DTO.user.UserDTO;
 import com.casey.aimihired.service.UserService;
+import com.casey.aimihired.util.ApiResponse;
 
 import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.GetMapping;
 
 
 @RestController
@@ -29,42 +29,34 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<UserDTO> registerUser(@Valid @RequestBody UserDTO user) {
-        UserDTO createdUser = service.storeUser(user);
+    public ResponseEntity<ApiResponse> registerUser(@Valid @RequestBody UserDTO user) {
+        ApiResponse userObject = service.store(user);
         
-        return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userObject);
     } 
 
     @PostMapping("/login")
-    public ResponseEntity<LoginDTO> login(@Valid @RequestBody LoginDTO loginDTO) {
-        LoginDTO response = service.login(loginDTO);
+    public ResponseEntity<ApiResponse> login(@Valid @RequestBody LoginDTO loginDTO) {
+        ApiResponse response = service.login(loginDTO);
 
         return ResponseEntity.ok(response);
     }
-    
 
     @PutMapping("/update-password")
-    public ResponseEntity<ChangePasswordDTO> changePassword(@Valid @RequestBody ChangePasswordDTO changePasswordRequest) {
+    public ResponseEntity<ApiResponse> changePassword(@Valid @RequestBody ChangePasswordDTO changePasswordRequest) {
         Long id = 2L;
 
-        ChangePasswordDTO response = service.changePassword(id, changePasswordRequest);
+        ApiResponse response = service.changePassword(id, changePasswordRequest);
 
         return ResponseEntity.ok(response);
     }
 
     @PutMapping("/update-username")
-    public ResponseEntity<UpdateUserNameDTO> updateUserName(@Valid @RequestBody UpdateUserNameDTO newUsernameRequest) {
+    public ResponseEntity<ApiResponse> updateUserName(@Valid @RequestBody UpdateUserNameDTO newUsernameRequest) {
         Long id = 2L;
         
-        UpdateUserNameDTO response = service.updateUserName(id, newUsernameRequest);
+        ApiResponse response = service.updateUserName(id, newUsernameRequest);
 
         return ResponseEntity.ok(response);
     }
-
-    @GetMapping("/try")
-    public String tryLang() {
-        return "JWT WORKS!";
-    }
-    
-
 }

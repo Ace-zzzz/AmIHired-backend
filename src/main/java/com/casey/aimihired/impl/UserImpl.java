@@ -15,6 +15,7 @@ import com.casey.aimihired.models.User;
 import com.casey.aimihired.repo.UserRepo;
 import com.casey.aimihired.security.JwtUtils;
 import com.casey.aimihired.service.UserService;
+import com.casey.aimihired.util.ApiResponse;
 
 @Service
 public class UserImpl implements UserService {
@@ -34,13 +35,12 @@ public class UserImpl implements UserService {
     // STORE USER TO DB
     @Override
     @Transactional
-    public UserDTO storeUser(UserDTO user) {
+    public ApiResponse store(UserDTO user) {
         if (!user.getPassword().equals(user.getConfirmPassword())) {
             throw new IllegalArgumentException("Passwords do not match!");
         }
 
         User entity = new User();
-        UserDTO response = new UserDTO();
 
         // HASH PASSWORD
         String hashedPassword = encoder.encode(user.getPassword());
@@ -53,17 +53,12 @@ public class UserImpl implements UserService {
         // SAVE
         repo.save(entity);
 
-        // CREATE JSON RESPONSE
-        response.setEmail(entity.getEmail());
-        response.setUserName(entity.getUserName());
-        response.setResponse("Successfully Created");
-
-        return response;
+        return new ApiResponse("Successfully Register", true);
     }
 
     // LOGIN USER
     @Override
-    public LoginDTO login(LoginDTO loginDTO) {
+    public ApiResponse login(LoginDTO loginDTO) {
         /**
          * AUTHENTICATE USER VIA
          * USERNAME AND PASSWORD
@@ -75,19 +70,13 @@ public class UserImpl implements UserService {
         // GENERATES JWT
         String token = jwtUtils.generateToken(auth.getName());
 
-        /**
-         * INSTANTIATE LOGIN 
-         * DTO FOR RESPONSE
-         **/ 
-        LoginDTO response = new LoginDTO(token);
-
-        return response;
+        return new ApiResponse(token, true);
     }
 
     // CHANGE USER PASSWORD
     @Override
     @Transactional
-    public ChangePasswordDTO changePassword(Long userId, ChangePasswordDTO changePasswordRequest) {
+    public ApiResponse changePassword(Long userId, ChangePasswordDTO changePasswordRequest) {
         // FETCH USER FROM DB
         User user = repo.findById(userId).orElseThrow(
             () -> new IllegalArgumentException("User not found")
@@ -106,15 +95,13 @@ public class UserImpl implements UserService {
         // UPDATE THE PASSWORD
         user.setPassword(encoder.encode(changePasswordRequest.getNewPassword()));
         
-        ChangePasswordDTO response = new ChangePasswordDTO("Successfully Changed Password");
-
-        return response;
+        return new ApiResponse("Successfully Changed Password", true);
     }
 
     // UPDATE USERNAME
     @Override
     @Transactional
-    public UpdateUserNameDTO updateUserName(Long userId, UpdateUserNameDTO newUsernameRequest) {
+    public ApiResponse updateUserName(Long userId, UpdateUserNameDTO newUsernameRequest) {
         // FETCH USER FROM DB
         User user = repo.findById(userId).orElseThrow(
             () -> new IllegalArgumentException("User not found")
@@ -123,8 +110,6 @@ public class UserImpl implements UserService {
         // UPDATE USERNAME
         user.setUserName(newUsernameRequest.getUserName().trim());
         
-        UpdateUserNameDTO response = new UpdateUserNameDTO("Successfully updated Username");
-
-        return response;
+        return new ApiResponse("Successfully updated Username", true);
     }
 }

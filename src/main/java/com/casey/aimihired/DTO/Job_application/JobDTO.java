@@ -6,11 +6,9 @@ import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter @Setter
-@NoArgsConstructor
 public class JobDTO {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column(length = 50, nullable = false) 

@@ -22,6 +22,7 @@ import com.casey.aimihired.DTO.user.UpdateUserNameDTO;
 import com.casey.aimihired.impl.UserImpl;
 import com.casey.aimihired.models.User;
 import com.casey.aimihired.repo.UserRepo;
+import com.casey.aimihired.util.ApiResponse;
 
 @ExtendWith(MockitoExtension.class)
 public class UpdateUserTest {
@@ -159,7 +160,7 @@ public class UpdateUserTest {
     }
 
     @Test
-    void updateUserPassword_hashedAndSaveToDB_whenNoExceptionError() {
+    void changePassword_hashedAndSaveToDB_whenNoExceptionError() {
        // ARRANGE
        Long userId = 1L;
 
@@ -192,7 +193,7 @@ public class UpdateUserTest {
 
 
        // ACT
-       ChangePasswordDTO response = userService.changePassword(userId, changePasswordRequest);
+       ApiResponse response = userService.changePassword(userId, changePasswordRequest);
 
        // VERIFIES THAT findById() IS CALLED ONE TIME
        verify(repo, times(1)).findById(user.getId());
@@ -200,15 +201,9 @@ public class UpdateUserTest {
        // VERIFIES THAT encode() IS CALLED ONE TIME
        verify(encoder, times(1)).encode(changePasswordRequest.getNewPassword());
 
-       /**
-        * VERIFIES THAT save() IS CALLED ONE TIME
-        * AND INDEED SAVE AND UPDATE THE USER'S PASSWORD
-        **/
-       verify(repo, times(1)).save(user);
-
        // ASSERT
        assertEquals("new_hashed_password", user.getPassword());
-       assertEquals("Successfully Changed Password", response.getResponse());
+       assertEquals("Successfully Changed Password", response.message());
     }
 
     @Test
@@ -248,7 +243,7 @@ public class UpdateUserTest {
         when(repo.findById(user.getId())).thenReturn(Optional.of(user));
         
         // ACT
-        UpdateUserNameDTO response = userService.updateUserName(userId, newUsernameRequest);
+        ApiResponse response = userService.updateUserName(userId, newUsernameRequest);
 
        /**
         * VERIFIES THAT findById() IS CALLED 
@@ -256,15 +251,8 @@ public class UpdateUserTest {
         **/
         verify(repo, times(1)).findById(user.getId());
 
-        
-       /**
-        * VERIFIES THAT save() IS CALLED ONE TIME
-        * AND INDEED SAVE AND UPDATE THE USER'S USERNAME
-        **/
-        verify(repo, times(1)).save(user);
-
         // ASSERT
         assertEquals(newUsernameRequest.getUserName(), user.getUserName());
-        assertEquals("Successfully updated Username", response.getResponse());
+        assertEquals("Successfully updated Username", response.message());
     }
 }

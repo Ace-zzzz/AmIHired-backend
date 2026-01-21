@@ -21,6 +21,7 @@ import com.casey.aimihired.DTO.Job_application.JobDTO;
 import com.casey.aimihired.impl.JobImpl;
 import com.casey.aimihired.models.Job_application.Job;
 import com.casey.aimihired.repo.JobRepo;
+import com.casey.aimihired.util.ApiResponse;
 
 @ExtendWith(MockitoExtension.class)
 public class JobTest {
@@ -42,7 +43,7 @@ public class JobTest {
         dto.setJobURL("www.youtube.com");
 
         // ACT
-        JobDTO response = jobService.create(dto);
+        ApiResponse response = jobService.create(dto);
 
         /**
          * GET THE ACTUAL 
@@ -58,7 +59,7 @@ public class JobTest {
         verifyNoMoreInteractions(repo);
 
         // ASSERT
-        assertEquals("Successfully created", response.getResponse());
+        assertEquals("Successfully created", response.message());
     }
 
     @Test
