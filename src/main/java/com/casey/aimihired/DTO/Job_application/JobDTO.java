@@ -12,12 +12,6 @@ import lombok.Setter;
 @Getter @Setter
 @NoArgsConstructor
 public class JobDTO {
-    private String response;
-
-    public JobDTO(String response) {
-        this.response = response;
-    }
-
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column(length = 50, nullable = false) 
     @NotBlank(message = "Position is required!")
