@@ -6,11 +6,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.casey.aimihired.DTO.Job_application.GetJobDTO;
 import com.casey.aimihired.DTO.Job_application.JobDTO;
 import com.casey.aimihired.service.JobService;
+import com.casey.aimihired.util.ApiResponse;
 
 import jakarta.validation.Valid;
 
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,10 +37,10 @@ public class JobController {
      * CREATING JOB ENTRY
      **/
     @PostMapping("/jobs")
-    public ResponseEntity<JobDTO> create(@Valid @RequestBody JobDTO dto) {
-        JobDTO response = service.create(dto);
+    public ResponseEntity<ApiResponse> create(@Valid @RequestBody JobDTO dto) {
+        ApiResponse response = service.create(dto);
         
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     /**
@@ -70,10 +70,10 @@ public class JobController {
      * UPDATING JOB
      **/
     @PutMapping("/jobs/{id}")
-    public ResponseEntity<JobDTO> update(@PathVariable Long id, @RequestBody JobDTO dto) {
-        JobDTO job = service.update(id, dto);
+    public ResponseEntity<ApiResponse> update(@PathVariable Long id, @RequestBody JobDTO dto) {
+        ApiResponse response = service.update(id, dto);
 
-        return ResponseEntity.ok(job);
+        return ResponseEntity.ok(response);
     }
 
     /**
@@ -81,10 +81,9 @@ public class JobController {
      * DELETING JOB ENTITY
      **/
     @DeleteMapping("/jobs/{id}")
-    public ResponseEntity<?> delete(@PathVariable Long id) {
-        service.delete(id);
+    public ResponseEntity<ApiResponse> delete(@PathVariable Long id) {
+        ApiResponse response = service.delete(id);
 
-        return ResponseEntity.ok(Map.of("message", "Job Deleted Successfully"));
+        return ResponseEntity.ok(response);
     }
-        
 }

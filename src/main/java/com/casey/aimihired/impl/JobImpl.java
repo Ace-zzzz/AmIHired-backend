@@ -10,6 +10,7 @@ import com.casey.aimihired.DTO.Job_application.JobDTO;
 import com.casey.aimihired.models.Job_application.Job;
 import com.casey.aimihired.repo.JobRepo;
 import com.casey.aimihired.service.JobService;
+import com.casey.aimihired.util.ApiResponse;
 
 @Service
 public class JobImpl implements JobService{
@@ -23,7 +24,7 @@ public class JobImpl implements JobService{
     // CREATES JOB ENTRY
     @Override
     @Transactional
-    public JobDTO create(JobDTO dto) {
+    public ApiResponse create(JobDTO dto) {
         // CREATE NEW JOB ENTITY
         Job entity = new Job();
         
@@ -36,10 +37,7 @@ public class JobImpl implements JobService{
         // SAVE THE ENTITY ON DATABASE 
         repo.save(entity);
 
-        // RETURN A DTO RESPONSE
-        JobDTO response = new JobDTO("Successfully created");
-
-        return response;
+        return new ApiResponse("Successfully created", true);
     }
 
     // GET ALL THE JOB
@@ -70,7 +68,7 @@ public class JobImpl implements JobService{
     // UPDATE JOB
     @Override
     @Transactional
-    public JobDTO update(Long id, JobDTO dto) {
+    public ApiResponse update(Long id, JobDTO dto) {
         /**
          * THROWS EXCEPTION
          * IF JOB NOT FOUND BY ID
@@ -85,20 +83,20 @@ public class JobImpl implements JobService{
          **/ 
         mapDtoToEntity(job, dto);
 
-        return new JobDTO("Successfully updated");
+        return new ApiResponse("Successfully updated", true);
     }
 
     // DELETES JOB
     @Override
     @Transactional
-    public String delete(Long id) {
+    public ApiResponse delete(Long id) {
         Job job = repo.findById(id).orElseThrow(
             () -> new IllegalArgumentException("Job with id " + id + " is not found")
         );
 
         repo.delete(job);
 
-        return "Successfully deleted";
+        return new ApiResponse("Successfully deleted", true);
     }
 
     /**
