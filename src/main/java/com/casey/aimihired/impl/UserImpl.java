@@ -47,7 +47,7 @@ public class UserImpl implements UserService {
 
         // SET USER FIELDS
         entity.setEmail(user.getEmail().trim());
-        entity.setUserName(user.getUserName().trim());
+        entity.setUsername(user.getUsername().trim());
         entity.setPassword(hashedPassword);
         
         // SAVE
@@ -64,7 +64,7 @@ public class UserImpl implements UserService {
          * USERNAME AND PASSWORD
          **/ 
         Authentication auth = authManager.authenticate(
-            new UsernamePasswordAuthenticationToken(loginDTO.getUserName(), loginDTO.getPassword())
+            new UsernamePasswordAuthenticationToken(loginDTO.getUsername(), loginDTO.getPassword())
         );
 
         // GENERATES JWT
@@ -108,7 +108,7 @@ public class UserImpl implements UserService {
         );
 
         // UPDATE USERNAME
-        user.setUserName(newUsernameRequest.getUserName().trim());
+        user.setUsername(newUsernameRequest.getUsername().trim());
         
         return new ApiResponse("Successfully updated Username", true);
     }

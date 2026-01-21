@@ -28,11 +28,10 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;    
 
-    @JsonProperty("user_name")
     @Column(unique = true, length = 25, nullable = false) 
     @NotBlank(message = "Username is required!")
     @Size(min = 8, max = 25, message = "Username should be between 8 and 25 characters")
-    private String userName;
+    private String username;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column(nullable = false)

@@ -68,7 +68,7 @@ public class UserRegistrationTest {
         UserDTO userDTO = new UserDTO();
 
         userDTO.setEmail("test@gmail.com");
-        userDTO.setUserName("testUsername");
+        userDTO.setUsername("testUsername");
         userDTO.setPassword("password123");
         userDTO.setConfirmPassword("password123");
 

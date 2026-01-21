@@ -12,7 +12,7 @@ public class LoginDTO {
     @JsonProperty("user_name")
     @NotBlank(message = "Username is required!")
     @Size(min = 8, max = 25, message = "Username should be between 8 and 25 characters")
-    private String userName;
+    private String username;
 
     @NotBlank(message = "Password is required!")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)

@@ -35,26 +35,25 @@ public class LoginTest {
     void login_shouldReturnJWT_whenTheresNoException() {
         // ARRANGE
         LoginDTO loginDTO = new LoginDTO();
-        loginDTO.setUserName("validUsername");
+        loginDTO.setUsername("validUsername");
         loginDTO.setPassword("validPassword123");
 
-
         Authentication auth = mock(Authentication.class);
-        when(auth.getName()).thenReturn(loginDTO.getUserName());
+        when(auth.getName()).thenReturn(loginDTO.getUsername());
 
         /**
          * MOCK AUTHENTICATION MANAGER CALL 
          * TO SIMULATE AUTHENTICATION
          **/
         when(authManager.authenticate(
-            new UsernamePasswordAuthenticationToken(loginDTO.getUserName(), loginDTO.getPassword())
+            new UsernamePasswordAuthenticationToken(loginDTO.getUsername(), loginDTO.getPassword())
         )).thenReturn(auth);
 
         /**
          * MOCK JWT UTILS CALL 
          * TO SIMULATE TOKEN GENERATION
          **/
-        when(jwtUtils.generateToken(loginDTO.getUserName())).thenReturn("xxxxx.yyyyy.zzzzz");
+        when(jwtUtils.generateToken(loginDTO.getUsername())).thenReturn("xxxxx.yyyyy.zzzzz");
 
         // ACT
         ApiResponse response = userService.login(loginDTO);
@@ -67,13 +66,13 @@ public class LoginTest {
          * IS CALLED EXACTLY ONCE 
          **/
         verify(authManager, times(1)).authenticate(
-            new UsernamePasswordAuthenticationToken(loginDTO.getUserName(), loginDTO.getPassword())
+            new UsernamePasswordAuthenticationToken(loginDTO.getUsername(), loginDTO.getPassword())
         );
 
         /**
          * VERIFIES THAT generateToken()
          * IS CALLED EXACTLY ONCE 
          **/
-        verify(jwtUtils, times(1)).generateToken(loginDTO.getUserName());
+        verify(jwtUtils, times(1)).generateToken(loginDTO.getUsername());
     }
 }

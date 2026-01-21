@@ -230,10 +230,10 @@ public class UpdateUserTest {
 
         User user = new User();
         user.setId(userId);
-        user.setUserName("oldUsername");
+        user.setUsername("oldUsername");
 
         UpdateUserNameDTO newUsernameRequest = new UpdateUserNameDTO();
-        newUsernameRequest.setUserName("updatedUsername");
+        newUsernameRequest.setUsername("updatedUsername");
 
         /**
          * MOCK THE REPOSITORY CALL
@@ -252,7 +252,7 @@ public class UpdateUserTest {
         verify(repo, times(1)).findById(user.getId());
 
         // ASSERT
-        assertEquals(newUsernameRequest.getUserName(), user.getUserName());
+        assertEquals(newUsernameRequest.getUsername(), user.getUsername());
         assertEquals("Successfully updated Username", response.message());
     }
 }
