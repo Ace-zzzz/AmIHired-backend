@@ -5,6 +5,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.casey.aimihired.DTO.user.ChangePasswordDTO;
 import com.casey.aimihired.DTO.user.LoginDTO;
@@ -32,6 +33,7 @@ public class UserImpl implements UserService {
 
     // STORE USER TO DB
     @Override
+    @Transactional
     public UserDTO storeUser(UserDTO user) {
         if (!user.getPassword().equals(user.getConfirmPassword())) {
             throw new IllegalArgumentException("Passwords do not match!");
@@ -84,6 +86,7 @@ public class UserImpl implements UserService {
 
     // CHANGE USER PASSWORD
     @Override
+    @Transactional
     public ChangePasswordDTO changePassword(Long userId, ChangePasswordDTO changePasswordRequest) {
         // FETCH USER FROM DB
         User user = repo.findById(userId).orElseThrow(
@@ -102,7 +105,6 @@ public class UserImpl implements UserService {
 
         // UPDATE THE PASSWORD
         user.setPassword(encoder.encode(changePasswordRequest.getNewPassword()));
-        repo.save(user);
         
         ChangePasswordDTO response = new ChangePasswordDTO("Successfully Changed Password");
 
@@ -111,6 +113,7 @@ public class UserImpl implements UserService {
 
     // UPDATE USERNAME
     @Override
+    @Transactional
     public UpdateUserNameDTO updateUserName(Long userId, UpdateUserNameDTO newUsernameRequest) {
         // FETCH USER FROM DB
         User user = repo.findById(userId).orElseThrow(
@@ -119,7 +122,6 @@ public class UserImpl implements UserService {
 
         // UPDATE USERNAME
         user.setUserName(newUsernameRequest.getUserName().trim());
-        repo.save(user);
         
         UpdateUserNameDTO response = new UpdateUserNameDTO("Successfully updated Username");
 
