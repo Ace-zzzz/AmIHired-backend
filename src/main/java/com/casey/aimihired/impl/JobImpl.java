@@ -104,15 +104,14 @@ public class JobImpl implements JobService{
      * THE JOB INTO DTO 
      **/
     private GetJobDTO convertToDTO(Job job) {
-        GetJobDTO dto = new GetJobDTO();
-        dto.setId(job.getId());
-        dto.setPosition(job.getPosition());
-        dto.setCompany(job.getCompany());
-        dto.setWorkModel(job.getWorkModel());
-        dto.setStatus(job.getStatus());
-        dto.setJobURL(job.getJobURL());
-
-        return dto;
+        return GetJobDTO.builder()
+            .id(job.getId())
+            .position(job.getPosition())
+            .company(job.getCompany())
+            .workModel(job.getWorkModel())
+            .status(job.getStatus())
+            .jobURL(job.getJobURL())
+            .build();
     }
 
     // UPDATES JOB ENTITY

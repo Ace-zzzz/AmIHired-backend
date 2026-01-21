@@ -1,14 +1,15 @@
 package com.casey.aimihired.DTO.Job_application;
 
+import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
-@Getter @Setter
+@Getter
+@Builder
 public class GetJobDTO {
-    private Long id;
-    private String position;
-    private String company;
-    private String workModel;
-    private String status;
-    private String jobURL;
+    private final Long id;
+    private final String position;
+    private final String company;
+    private final String workModel;
+    private final String status;
+    private final String jobURL;
 }
