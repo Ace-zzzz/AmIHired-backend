@@ -7,7 +7,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.casey.aimihired.DTO.Job_application.GetJobDTO;
 import com.casey.aimihired.DTO.Job_application.JobDTO;
+import com.casey.aimihired.models.Job_application.Fulltime;
+import com.casey.aimihired.models.Job_application.Internship;
 import com.casey.aimihired.models.Job_application.Job;
+import com.casey.aimihired.models.Job_application.PartTime;
 import com.casey.aimihired.repo.JobRepo;
 import com.casey.aimihired.service.JobService;
 import com.casey.aimihired.util.ApiResponse;
@@ -25,17 +28,14 @@ public class JobImpl implements JobService{
     @Override
     @Transactional
     public ApiResponse create(JobDTO dto) {
-        // CREATE NEW JOB ENTITY
-        Job entity = new Job();
-        
-        entity.setPosition(dto.getPosition());
-        entity.setCompany(dto.getCompany());
-        entity.setWorkModel(dto.getWorkModel());
-        entity.setStatus(dto.getStatus());
-        entity.setJobURL(dto.getJobURL());
+        // CREATE JOB 
+        Job job = processJobType(dto);
 
-        // SAVE THE ENTITY ON DATABASE 
-        repo.save(entity);
+        // MAP
+        mapJobDTOToEntity(job, dto);
+
+        // SAVE THE JOB ON DATABASE 
+        repo.save(job);
 
         return new ApiResponse("Successfully created", true);
     }
@@ -81,7 +81,7 @@ public class JobImpl implements JobService{
          * STATE TRANSFER 
          * TO UPDATE FIELDS
          **/ 
-        mapDtoToEntity(job, dto);
+        mapJobDTOToEntity(job, dto);
 
         return new ApiResponse("Successfully updated", true);
     }
@@ -115,11 +115,45 @@ public class JobImpl implements JobService{
     }
 
     // UPDATES JOB ENTITY
-    private void mapDtoToEntity(Job job, JobDTO dto) {
+    private void mapJobDTOToEntity(Job job, JobDTO dto) {
         job.setPosition(dto.getPosition());
         job.setCompany(dto.getCompany());
         job.setWorkModel(dto.getWorkModel());
         job.setStatus(dto.getStatus());
         job.setJobURL(dto.getJobURL());
+    }
+
+    /**
+     * SET FIELD FOR
+     * SPECIFIC JOB TYPE 
+     **/
+    private Job processJobType(JobDTO dto) {
+        return switch (dto.getJobType().toUpperCase()) {
+            case "INTERNSHIP" -> {
+                Internship internship = new Internship();
+                internship.setHourRequired(dto.getHourRequired());
+                internship.setIsPaid(dto.getIsPaid());
+
+                yield internship;
+            }
+
+            case "FULL TIME" -> {
+                Fulltime fulltime = new Fulltime();
+                fulltime.setBenefits(dto.getBenefits());
+                
+                yield fulltime;
+            }
+
+            case "PART TIME" -> {
+                PartTime partTime = new PartTime();
+                partTime.setShiftSchedule(dto.getShiftSchedule());
+
+                yield partTime;
+            }
+        
+            default -> throw new IllegalArgumentException(
+                "Unknow Job type " + dto.getJobType()
+            );
+        };
     }
 }

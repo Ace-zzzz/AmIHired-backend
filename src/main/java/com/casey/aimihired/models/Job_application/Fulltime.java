@@ -1,6 +1,7 @@
 package com.casey.aimihired.models.Job_application;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
@@ -11,6 +12,7 @@ import lombok.Setter;
 @Entity
 @Getter @Setter
 @Table(name = "fulltime")
+@DiscriminatorValue("FULL TIME")
 public class Fulltime extends Job{
     @Column(length = 50, nullable = false) 
     @NotBlank(message = "Benefits is required!")

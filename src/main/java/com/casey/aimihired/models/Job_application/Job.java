@@ -8,6 +8,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -24,6 +25,7 @@ import lombok.Setter;
 @Getter @Setter
 @Table(name = "jobs")
 @Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "job_type")
 public class Job {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
