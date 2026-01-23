@@ -133,4 +133,134 @@ public class JobTest {
         // ASSERT
         assertEquals(exception.getMessage(), "Job with id " + wrongId + " is not found");
     }
+
+    @Test
+    void updateJob_shouldThrowException_ifJobDidNotExist() {
+        // ARRANGE
+        Long wrongId = 404L;
+        
+        JobDTO dto = new JobDTO();
+        dto.setCompany("test Company");
+        dto.setPosition("test Position");
+        dto.setStatus("test Status");
+        dto.setWorkModel("test Work model");
+        dto.setJobURL("test Job URL");
+
+        // ACT
+        IllegalArgumentException exception = assertThrows(
+            IllegalArgumentException.class,
+            () -> jobService.update(wrongId, dto)
+        );
+
+        /**
+         * VERIFY THE REPO IS
+         * CALLED EXACTLY ONCE
+         **/
+        verify(repo, times(1)).findById(wrongId);
+        verifyNoMoreInteractions(repo);
+
+        // ASSERT
+        assertEquals(exception.getMessage(), "Job with id " + wrongId + " is not found");
+    }
+
+    @Test
+    void updateJob_shouldThrowSuccessMessage_ifJobExistAndNoProblem() {
+        // ARRANGE
+        Long id = 1L;
+        
+        JobDTO dto = new JobDTO();
+        dto.setCompany("test Company");
+        dto.setPosition("test Position");
+        dto.setStatus("test Status");
+        dto.setWorkModel("test Work model");
+        dto.setJobURL("test Job URL");
+
+        Job job = new Job();
+        job.setId(id);
+
+        /**
+         * MOCK REPOSITORY CALL 
+         * TO SIMULATE THE FINDING OF JOB BY ID
+         **/
+        when(repo.findById(id)).thenReturn(Optional.of(job));
+
+        // ACT
+        ApiResponse response = jobService.update(id, dto);
+
+        /**
+         * VERIFY THE REPO IS
+         * CALLED EXACTLY ONCE
+         **/
+        verify(repo, times(1)).findById(id);
+        verifyNoMoreInteractions(repo);
+
+        // ASSERT 
+        assertEquals("Successfully updated", response.message());
+        assertEquals(true, response.success());
+        
+        assertEquals(dto.getCompany(), job.getCompany());
+        assertEquals(dto.getPosition(), job.getPosition());
+        assertEquals(dto.getStatus(), job.getStatus());
+        assertEquals(dto.getWorkModel(), job.getWorkModel());
+        assertEquals(dto.getJobURL(), job.getJobURL());
+    }
+
+    @Test
+    void deleteJob_shouldThrowException_ifJobDidNotExist() {
+        // ARRANGE
+        Long wrongId = 404L;
+        
+        JobDTO dto = new JobDTO();
+        dto.setCompany("test Company");
+        dto.setPosition("test Position");
+        dto.setStatus("test Status");
+        dto.setWorkModel("test Work model");
+        dto.setJobURL("test Job URL");
+
+        // ACT
+        IllegalArgumentException exception = assertThrows(
+            IllegalArgumentException.class,
+            () -> jobService.delete(wrongId)
+        );
+
+        /**
+         * VERIFY THE REPO IS
+         * CALLED EXACTLY ONCE
+         **/
+        verify(repo, times(1)).findById(wrongId);
+        verifyNoMoreInteractions(repo);
+
+        // ASSERT
+        assertEquals(exception.getMessage(), "Job with id " + wrongId + " is not found");
+    }
+
+    @Test
+    void deleteJob_shouldThrowSuccessMessage_ifJobExistAndNoProblem() {
+        // ARRANGE
+        Long id = 1L;
+        
+        Job job = new Job();
+        job.setId(id);
+
+        /**
+         * MOCK REPOSITORY CALL 
+         * TO SIMULATE THE FINDING OF JOB BY ID
+         **/
+        when(repo.findById(id)).thenReturn(Optional.of(job));
+
+        // ACT
+        ApiResponse response = jobService.delete(id);
+
+        /**
+         * VERIFY THE REPO IS
+         * CALLED EXACTLY ONCE
+         **/
+        verify(repo, times(1)).findById(id);
+        verify(repo, times(1)).delete(job);
+        verifyNoMoreInteractions(repo);
+
+        // ASSERT 
+        assertEquals("Successfully deleted", response.message());
+        assertEquals(true, response.success());
+    }
 }
