@@ -68,12 +68,12 @@ public class JobImpl implements JobService{
     // GET SINGLE JOB
     @Override
     @Transactional(readOnly = true)
-    public GetJobDTO get(Long id) {
+    public GetJobDTO get(Long id, String username) {
         /**
          * THROWS EXCEPTION
          * IF JOB NOT FOUND BY ID
          **/
-        Job job = jobRepo.findById(id).orElseThrow(
+        Job job = jobRepo.findByIdAndUserUsername(id, username).orElseThrow(
             () -> new IllegalArgumentException("Job with id " + id + " is not found")
         );
 

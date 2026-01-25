@@ -9,7 +9,7 @@ import com.casey.aimihired.util.ApiResponse;
 public interface JobService {
     public ApiResponse create(JobDTO dto, String username);
     public List<GetJobDTO> getAll(String username);
-    public GetJobDTO get(Long id);
+    public GetJobDTO get(Long id, String username);
     public ApiResponse update(Long id, JobDTO dto);
     public ApiResponse delete(Long id);
 }

@@ -60,8 +60,8 @@ public class JobController {
      * FETCHING SINGLE JOBS
      **/
     @GetMapping("/jobs/{id}")
-    public ResponseEntity<GetJobDTO> get(@PathVariable Long id) {
-        GetJobDTO job = service.get(id);
+    public ResponseEntity<GetJobDTO> get(@PathVariable Long id, Authentication auth) {
+        GetJobDTO job = service.get(id, auth.getName());
 
         return ResponseEntity.ok(job);
     }
