@@ -19,8 +19,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.casey.aimihired.DTO.Job_application.GetJobDTO;
 import com.casey.aimihired.DTO.Job_application.JobDTO;
 import com.casey.aimihired.impl.JobImpl;
+import com.casey.aimihired.models.User;
+import com.casey.aimihired.models.Job_application.Fulltime;
 import com.casey.aimihired.models.Job_application.Job;
 import com.casey.aimihired.repo.JobRepo;
+import com.casey.aimihired.repo.UserRepo;
 import com.casey.aimihired.util.ApiResponse;
 
 @ExtendWith(MockitoExtension.class)
@@ -28,8 +31,13 @@ public class JobTest {
     @Mock
     private JobRepo repo;
 
+    @Mock
+    private UserRepo userRepo;
+
     @InjectMocks
     private JobImpl jobService;
+
+    private static final String testUsername = "testUser";
 
     @Test
     void createJob_shouldReturnSuccessMessage_whenNoException() {
@@ -43,8 +51,18 @@ public class JobTest {
         dto.setJobURL("www.youtube.com");
         dto.setJobType("FULL TIME");
 
+        User user = new User();
+        user.setId(1L);
+        user.setUsername(testUsername);
+
+        /**
+         * MOCK USER REPOSITORY CALL 
+         * TO SIMULATE USER LOOKUP
+         **/
+        when(userRepo.findByUsername(testUsername)).thenReturn(Optional.of(user));
+
         // ACT
-        ApiResponse response = jobService.create(dto);
+        ApiResponse response = jobService.create(dto, testUsername);
 
         /**
          * GET THE ACTUAL 
@@ -66,13 +84,13 @@ public class JobTest {
     @Test
     void getAllJob_shouldReturnListOfJobs_ifTheresAny() {
         // ACT
-        jobService.getAll();
+        jobService.getAll(testUsername);
 
         /**
          * VERIFY THE REPO IS
          * CALLED EXACTLY ONCE
          **/
-        verify(repo, times(1)).findAll();
+        verify(repo, times(1)).findByUserUsername(testUsername);
         verifyNoMoreInteractions(repo);
     }
 
@@ -93,16 +111,16 @@ public class JobTest {
          * MOCK REPOSITORY CALL 
          * TO SIMULATE THE FINDING OF JOB BY ID
          **/
-        when(repo.findById(id)).thenReturn(Optional.of(entity));
+        when(repo.findByIdAndUserUsername(id, testUsername)).thenReturn(Optional.of(entity));
         
         // ACT
-        GetJobDTO result = jobService.get(entity.getId());
+        GetJobDTO result = jobService.get(entity.getId(), testUsername);
 
         /**
          * VERIFY THE REPO IS
          * CALLED EXACTLY ONCE
          **/
-        verify(repo, times(1)).findById(entity.getId());
+        verify(repo, times(1)).findByIdAndUserUsername(entity.getId(), testUsername);
         verifyNoMoreInteractions(repo);
         
         // ASSERT
@@ -121,14 +139,14 @@ public class JobTest {
         // ACT
         IllegalArgumentException exception = assertThrows(
             IllegalArgumentException.class,
-            () -> jobService.get(wrongId)
+            () -> jobService.get(wrongId, testUsername)
         );
 
         /**
          * VERIFY THE REPO IS
          * CALLED EXACTLY ONCE
          **/
-        verify(repo, times(1)).findById(wrongId);
+        verify(repo, times(1)).findByIdAndUserUsername(wrongId, testUsername);
         verifyNoMoreInteractions(repo);
 
         // ASSERT
@@ -150,14 +168,14 @@ public class JobTest {
         // ACT
         IllegalArgumentException exception = assertThrows(
             IllegalArgumentException.class,
-            () -> jobService.update(wrongId, dto)
+            () -> jobService.update(wrongId, dto, testUsername)
         );
 
         /**
          * VERIFY THE REPO IS
          * CALLED EXACTLY ONCE
          **/
-        verify(repo, times(1)).findById(wrongId);
+        verify(repo, times(1)).findByIdAndUserUsername(wrongId, testUsername);
         verifyNoMoreInteractions(repo);
 
         // ASSERT
@@ -175,24 +193,26 @@ public class JobTest {
         dto.setStatus("test Status");
         dto.setWorkModel("test Work model");
         dto.setJobURL("test Job URL");
+        dto.setJobType("FULL TIME");
+        dto.setBenefits("test benefits");
 
-        Job job = new Job();
+        Fulltime job = new Fulltime();
         job.setId(id);
 
         /**
          * MOCK REPOSITORY CALL 
          * TO SIMULATE THE FINDING OF JOB BY ID
          **/
-        when(repo.findById(id)).thenReturn(Optional.of(job));
+        when(repo.findByIdAndUserUsername(id, testUsername)).thenReturn(Optional.of(job));
 
         // ACT
-        ApiResponse response = jobService.update(id, dto);
+        ApiResponse response = jobService.update(id, dto, testUsername);
 
         /**
          * VERIFY THE REPO IS
          * CALLED EXACTLY ONCE
          **/
-        verify(repo, times(1)).findById(id);
+        verify(repo, times(1)).findByIdAndUserUsername(id, testUsername);
         verifyNoMoreInteractions(repo);
 
         // ASSERT 
@@ -221,14 +241,14 @@ public class JobTest {
         // ACT
         IllegalArgumentException exception = assertThrows(
             IllegalArgumentException.class,
-            () -> jobService.delete(wrongId)
+            () -> jobService.delete(wrongId, testUsername)
         );
 
         /**
          * VERIFY THE REPO IS
          * CALLED EXACTLY ONCE
          **/
-        verify(repo, times(1)).findById(wrongId);
+        verify(repo, times(1)).findByIdAndUserUsername(wrongId, testUsername);
         verifyNoMoreInteractions(repo);
 
         // ASSERT
@@ -247,16 +267,16 @@ public class JobTest {
          * MOCK REPOSITORY CALL 
          * TO SIMULATE THE FINDING OF JOB BY ID
          **/
-        when(repo.findById(id)).thenReturn(Optional.of(job));
+        when(repo.findByIdAndUserUsername(id, testUsername)).thenReturn(Optional.of(job));
 
         // ACT
-        ApiResponse response = jobService.delete(id);
+        ApiResponse response = jobService.delete(id, testUsername);
 
         /**
          * VERIFY THE REPO IS
          * CALLED EXACTLY ONCE
          **/
-        verify(repo, times(1)).findById(id);
+        verify(repo, times(1)).findByIdAndUserUsername(id, testUsername);
         verify(repo, times(1)).delete(job);
         verifyNoMoreInteractions(repo);
 
