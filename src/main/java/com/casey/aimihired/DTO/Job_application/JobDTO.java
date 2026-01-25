@@ -74,7 +74,7 @@ public class JobDTO {
      **/
     @JsonProperty(access = JsonProperty.Access.READ_ONLY) 
     @AssertTrue(message = "Required fields for selected job type are missing.")
-    private boolean isSelectedJobValid() {
+    public boolean isSelectedJobValid() {
         if (jobType == null) return true;
 
         return switch (jobType.toUpperCase()) {

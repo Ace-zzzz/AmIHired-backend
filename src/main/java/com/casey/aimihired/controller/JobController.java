@@ -14,6 +14,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,9 +38,9 @@ public class JobController {
      * CREATING JOB ENTRY
      **/
     @PostMapping("/jobs")
-    public ResponseEntity<ApiResponse> create(@Valid @RequestBody JobDTO dto) {
-        ApiResponse response = service.create(dto);
-        
+    public ResponseEntity<ApiResponse> create(@Valid @RequestBody JobDTO dto, Authentication auth) {
+        ApiResponse response = service.create(dto, auth.getName());
+
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 

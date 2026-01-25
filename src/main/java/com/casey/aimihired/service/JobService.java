@@ -7,7 +7,7 @@ import com.casey.aimihired.DTO.Job_application.JobDTO;
 import com.casey.aimihired.util.ApiResponse;
 
 public interface JobService {
-    public ApiResponse create(JobDTO dto);
+    public ApiResponse create(JobDTO dto, String username);
     public List<GetJobDTO> getAll();
     public GetJobDTO get(Long id);
     public ApiResponse update(Long id, JobDTO dto);

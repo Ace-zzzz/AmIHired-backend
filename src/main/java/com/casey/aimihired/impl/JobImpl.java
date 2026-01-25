@@ -7,27 +7,36 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.casey.aimihired.DTO.Job_application.GetJobDTO;
 import com.casey.aimihired.DTO.Job_application.JobDTO;
+import com.casey.aimihired.models.User;
 import com.casey.aimihired.models.Job_application.Fulltime;
 import com.casey.aimihired.models.Job_application.Internship;
 import com.casey.aimihired.models.Job_application.Job;
 import com.casey.aimihired.models.Job_application.PartTime;
 import com.casey.aimihired.repo.JobRepo;
+import com.casey.aimihired.repo.UserRepo;
 import com.casey.aimihired.service.JobService;
 import com.casey.aimihired.util.ApiResponse;
 
 @Service
 public class JobImpl implements JobService{
-    private final JobRepo repo;
+    private final JobRepo jobRepo;
+    private final UserRepo userRepo;
 
     // DEPENDENCY INJECTION
-    public JobImpl(JobRepo repo) {
-        this.repo = repo;
+    public JobImpl(JobRepo jobRepo, UserRepo userRepo) {
+        this.jobRepo = jobRepo;
+        this.userRepo = userRepo;
     }
 
     // CREATES JOB ENTRY
     @Override
     @Transactional
-    public ApiResponse create(JobDTO dto) {
+    public ApiResponse create(JobDTO dto, String username) {
+        // FIND USER BY USERNAME
+        User user = userRepo.findByUsername(username).orElseThrow(
+            () -> new IllegalArgumentException("User with username not found")
+        );
+
         // CREATE JOB TYPE
         Job job = processJobType(dto);
 
@@ -38,8 +47,10 @@ public class JobImpl implements JobService{
          **/ 
         mapJobDTOToEntity(job, dto);
 
+        job.setUser(user);
+
         // SAVE THE JOB ON DATABASE
-        repo.save(job);
+        jobRepo.save(job);
 
         return new ApiResponse("Successfully created", true);
     }
@@ -48,7 +59,7 @@ public class JobImpl implements JobService{
     @Override
     @Transactional(readOnly = true)
     public List<GetJobDTO> getAll() {
-        return repo.findAll()
+        return jobRepo.findAll()
                    .stream()
                    .map(this::convertToDTO)
                    .toList();
@@ -62,7 +73,7 @@ public class JobImpl implements JobService{
          * THROWS EXCEPTION
          * IF JOB NOT FOUND BY ID
          **/
-        Job job = repo.findById(id).orElseThrow(
+        Job job = jobRepo.findById(id).orElseThrow(
             () -> new IllegalArgumentException("Job with id " + id + " is not found")
         );
 
@@ -77,7 +88,7 @@ public class JobImpl implements JobService{
          * THROWS EXCEPTION
          * IF JOB NOT FOUND BY ID
          **/
-        Job job = repo.findById(id).orElseThrow(
+        Job job = jobRepo.findById(id).orElseThrow(
             () -> new IllegalArgumentException("Job with id " + id + " is not found")
         );
 
@@ -100,11 +111,11 @@ public class JobImpl implements JobService{
     @Override
     @Transactional
     public ApiResponse delete(Long id) {
-        Job job = repo.findById(id).orElseThrow(
+        Job job = jobRepo.findById(id).orElseThrow(
             () -> new IllegalArgumentException("Job with id " + id + " is not found")
         );
 
-        repo.delete(job);
+        jobRepo.delete(job);
 
         return new ApiResponse("Successfully deleted", true);
     }
