@@ -71,8 +71,8 @@ public class JobController {
      * UPDATING JOB
      **/
     @PutMapping("/jobs/{id}")
-    public ResponseEntity<ApiResponse> update(@PathVariable Long id, @RequestBody JobDTO dto) {
-        ApiResponse response = service.update(id, dto);
+    public ResponseEntity<ApiResponse> update(@PathVariable Long id, @Valid @RequestBody JobDTO dto, Authentication auth) {
+        ApiResponse response = service.update(id, dto, auth.getName());
 
         return ResponseEntity.ok(response);
     }

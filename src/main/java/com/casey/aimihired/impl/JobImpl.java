@@ -83,12 +83,12 @@ public class JobImpl implements JobService{
     // UPDATE JOB
     @Override
     @Transactional
-    public ApiResponse update(Long id, JobDTO dto) {
+    public ApiResponse update(Long id, JobDTO dto, String username) {
         /**
          * THROWS EXCEPTION
          * IF JOB NOT FOUND BY ID
          **/
-        Job job = jobRepo.findById(id).orElseThrow(
+        Job job = jobRepo.findByIdAndUserUsername(id, username).orElseThrow(
             () -> new IllegalArgumentException("Job with id " + id + " is not found")
         );
 
