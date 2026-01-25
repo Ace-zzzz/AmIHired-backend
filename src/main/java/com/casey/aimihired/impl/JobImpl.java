@@ -58,8 +58,8 @@ public class JobImpl implements JobService{
     // GET ALL THE JOB
     @Override
     @Transactional(readOnly = true)
-    public List<GetJobDTO> getAll() {
-        return jobRepo.findAll()
+    public List<GetJobDTO> getAll(String username) {
+        return jobRepo.findByUserUsername(username)
                    .stream()
                    .map(this::convertToDTO)
                    .toList();

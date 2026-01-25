@@ -49,8 +49,8 @@ public class JobController {
      * FETCHING ALL JOBS
      **/
     @GetMapping("/jobs")
-    public ResponseEntity<List<GetJobDTO>> getAll() {
-        List<GetJobDTO> jobs = service.getAll();
+    public ResponseEntity<List<GetJobDTO>> getAll(Authentication auth) {
+        List<GetJobDTO> jobs = service.getAll(auth.getName());
 
         return ResponseEntity.ok(jobs);
     }
