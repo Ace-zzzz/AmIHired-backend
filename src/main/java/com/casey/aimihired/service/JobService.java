@@ -11,5 +11,5 @@ public interface JobService {
     public List<GetJobDTO> getAll(String username);
     public GetJobDTO get(Long id, String username);
     public ApiResponse update(Long id, JobDTO dto, String username);
-    public ApiResponse delete(Long id);
+    public ApiResponse delete(Long id, String username);
 }

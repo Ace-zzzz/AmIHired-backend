@@ -110,8 +110,8 @@ public class JobImpl implements JobService{
     // DELETES JOB
     @Override
     @Transactional
-    public ApiResponse delete(Long id) {
-        Job job = jobRepo.findById(id).orElseThrow(
+    public ApiResponse delete(Long id, String username) {
+        Job job = jobRepo.findByIdAndUserUsername(id, username).orElseThrow(
             () -> new IllegalArgumentException("Job with id " + id + " is not found")
         );
 

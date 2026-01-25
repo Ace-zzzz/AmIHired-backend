@@ -82,8 +82,8 @@ public class JobController {
      * DELETING JOB ENTITY
      **/
     @DeleteMapping("/jobs/{id}")
-    public ResponseEntity<ApiResponse> delete(@PathVariable Long id) {
-        ApiResponse response = service.delete(id);
+    public ResponseEntity<ApiResponse> delete(@PathVariable Long id, Authentication auth) {
+        ApiResponse response = service.delete(id, auth.getName());
 
         return ResponseEntity.ok(response);
     }
