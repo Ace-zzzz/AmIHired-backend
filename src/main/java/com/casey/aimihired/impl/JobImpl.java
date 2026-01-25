@@ -28,13 +28,17 @@ public class JobImpl implements JobService{
     @Override
     @Transactional
     public ApiResponse create(JobDTO dto) {
-        // CREATE JOB 
+        // CREATE JOB TYPE
         Job job = processJobType(dto);
 
-        // MAP
+        /**
+         * STATE TRANSFER 
+         * TO CREATE JOB FOR 
+         * COMMON FIELDS
+         **/ 
         mapJobDTOToEntity(job, dto);
 
-        // SAVE THE JOB ON DATABASE 
+        // SAVE THE JOB ON DATABASE
         repo.save(job);
 
         return new ApiResponse("Successfully created", true);
@@ -79,9 +83,15 @@ public class JobImpl implements JobService{
 
         /**
          * STATE TRANSFER 
-         * TO UPDATE FIELDS
+         * TO UPDATE COMMON FIELDS
          **/ 
         mapJobDTOToEntity(job, dto);
+
+        /**
+         * UPDATE FIELDS FOR
+         * SPECIFIC JOB TYPE
+         **/
+        updateJobType(job, dto);
 
         return new ApiResponse("Successfully updated", true);
     }
@@ -131,7 +141,7 @@ public class JobImpl implements JobService{
         return dtoBuilder.build();
     }
 
-    // UPDATES JOB ENTITY
+    // MAP DTO INTO JOB ENTITY
     private void mapJobDTOToEntity(Job job, JobDTO dto) {
         job.setPosition(dto.getPosition());
         job.setCompany(dto.getCompany());
@@ -172,5 +182,22 @@ public class JobImpl implements JobService{
                 "Unknow Job type " + dto.getJobType()
             );
         };
+    }
+    
+    /**
+     * UPDATE FIELDS FOR
+     * SPECIFIC JOB TYPE
+     **/
+    private void updateJobType(Job job, JobDTO dto) {
+        if (job instanceof Fulltime fulltime) 
+            fulltime.setBenefits(dto.getBenefits());
+
+        if (job instanceof PartTime partTime) 
+                partTime.setShiftSchedule(dto.getShiftSchedule());
+        
+        if (job instanceof Internship internship) {
+                internship.setIsPaid(dto.getIsPaid());
+                internship.setHourRequired(dto.getHourRequired());
+        }
     }
 }

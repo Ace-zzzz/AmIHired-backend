@@ -16,6 +16,7 @@ public class GetJobDTO {
     private final String jobType;
     private final String position;
     private final String company;
+    @JsonProperty(value = "work_model")
     private final String workModel;
     private final String status;
     @JsonProperty(value = "job_url")
