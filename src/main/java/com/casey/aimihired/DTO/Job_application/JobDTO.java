@@ -74,13 +74,13 @@ public class JobDTO {
      **/
     @JsonProperty(access = JsonProperty.Access.READ_ONLY) 
     @AssertTrue(message = "Required fields for selected job type are missing.")
-    public boolean isSelectedJobValid() {
+    private boolean isSelectedJobValid() {
         if (jobType == null) return true;
 
         return switch (jobType.toUpperCase()) {
-            case "INTERNSHIP" -> hourRequired > 0 && isPaid != null;
-            case "PART TIME"  -> shiftSchedule != null && !shiftSchedule.isBlank();
             case "FULL TIME"  -> benefits      != null && !benefits.isBlank();
+            case "PART TIME"  -> shiftSchedule != null && !shiftSchedule.isBlank();
+            case "INTERNSHIP" -> hourRequired > 0 && isPaid != null;
             default -> true;
         };
     }

@@ -104,14 +104,31 @@ public class JobImpl implements JobService{
      * THE JOB INTO DTO 
      **/
     private GetJobDTO convertToDTO(Job job) {
-        return GetJobDTO.builder()
+        GetJobDTO.GetJobDTOBuilder dtoBuilder = GetJobDTO.builder()
             .id(job.getId())
             .position(job.getPosition())
             .company(job.getCompany())
             .workModel(job.getWorkModel())
             .status(job.getStatus())
-            .jobURL(job.getJobURL())
-            .build();
+            .jobURL(job.getJobURL());
+
+        if (job instanceof Fulltime fulltime) {
+            dtoBuilder.jobType("FULL TIME")
+                      .benefits(fulltime.getBenefits());
+        }
+
+        if (job instanceof PartTime partTime) {
+            dtoBuilder.jobType("PART TIME")
+                      .shiftSchedule(partTime.getShiftSchedule());
+        }
+
+        if (job instanceof Internship internship) {
+            dtoBuilder.jobType("INTERNSHIP")
+                      .hourRequired(internship.getHourRequired())
+                      .isPaid(internship.getIsPaid());
+        }
+
+        return dtoBuilder.build();
     }
 
     // UPDATES JOB ENTITY

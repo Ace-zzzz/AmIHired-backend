@@ -41,6 +41,7 @@ public class JobTest {
         dto.setWorkModel("on-site");
         dto.setStatus("pending");
         dto.setJobURL("www.youtube.com");
+        dto.setJobType("FULL TIME");
 
         // ACT
         ApiResponse response = jobService.create(dto);
