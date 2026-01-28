@@ -15,9 +15,10 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 
-import com.casey.aimihired.DTO.LoginDTO;
+import com.casey.aimihired.DTO.user.LoginDTO;
 import com.casey.aimihired.impl.UserImpl;
 import com.casey.aimihired.security.JwtUtils;
+import com.casey.aimihired.util.ApiResponse;
 
 @ExtendWith(MockitoExtension.class)
 public class LoginTest {
@@ -34,45 +35,44 @@ public class LoginTest {
     void login_shouldReturnJWT_whenTheresNoException() {
         // ARRANGE
         LoginDTO loginDTO = new LoginDTO();
-        loginDTO.setUserName("validUsername");
+        loginDTO.setUsername("validUsername");
         loginDTO.setPassword("validPassword123");
 
-
         Authentication auth = mock(Authentication.class);
-        when(auth.getName()).thenReturn(loginDTO.getUserName());
+        when(auth.getName()).thenReturn(loginDTO.getUsername());
 
         /**
          * MOCK AUTHENTICATION MANAGER CALL 
          * TO SIMULATE AUTHENTICATION
          **/
         when(authManager.authenticate(
-            new UsernamePasswordAuthenticationToken(loginDTO.getUserName(), loginDTO.getPassword())
+            new UsernamePasswordAuthenticationToken(loginDTO.getUsername(), loginDTO.getPassword())
         )).thenReturn(auth);
 
         /**
          * MOCK JWT UTILS CALL 
          * TO SIMULATE TOKEN GENERATION
          **/
-        when(jwtUtils.generateToken(loginDTO.getUserName())).thenReturn("xxxxx.yyyyy.zzzzz");
+        when(jwtUtils.generateToken(loginDTO.getUsername())).thenReturn("xxxxx.yyyyy.zzzzz");
 
         // ACT
-        LoginDTO response = userService.login(loginDTO);
+        ApiResponse response = userService.login(loginDTO);
 
         // ASSERT
-        assertEquals("xxxxx.yyyyy.zzzzz", response.getResponse());
+        assertEquals("xxxxx.yyyyy.zzzzz", response.message());
 
         /**
          * VERIFIES THAT authenticate()
          * IS CALLED EXACTLY ONCE 
          **/
         verify(authManager, times(1)).authenticate(
-            new UsernamePasswordAuthenticationToken(loginDTO.getUserName(), loginDTO.getPassword())
+            new UsernamePasswordAuthenticationToken(loginDTO.getUsername(), loginDTO.getPassword())
         );
 
         /**
          * VERIFIES THAT generateToken()
          * IS CALLED EXACTLY ONCE 
          **/
-        verify(jwtUtils, times(1)).generateToken(loginDTO.getUserName());
+        verify(jwtUtils, times(1)).generateToken(loginDTO.getUsername());
     }
 }

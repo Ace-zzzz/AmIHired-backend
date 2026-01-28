@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.casey.aimihired.models.User;
 
 public interface UserRepo extends JpaRepository<User, Long>{
-    Optional<User> findByUserName(String userName);
+    Optional<User> findByUsername(String username);
 }

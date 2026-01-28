@@ -15,10 +15,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.casey.aimihired.DTO.UserDTO;
 import com.casey.aimihired.models.User;
+import com.casey.aimihired.DTO.user.UserDTO;
 import com.casey.aimihired.impl.UserImpl;
 import com.casey.aimihired.repo.UserRepo;
+import com.casey.aimihired.util.ApiResponse;
 
 @ExtendWith(MockitoExtension.class)
 public class UserRegistrationTest {
@@ -46,7 +47,7 @@ public class UserRegistrationTest {
         // ACT
         IllegalArgumentException exception = assertThrows(
             IllegalArgumentException.class,
-            () -> userService.storeUser(userDTO)
+            () -> userService.store(userDTO)
         );
 
         /**
@@ -67,14 +68,14 @@ public class UserRegistrationTest {
         UserDTO userDTO = new UserDTO();
 
         userDTO.setEmail("test@gmail.com");
-        userDTO.setUserName("testUsername");
+        userDTO.setUsername("testUsername");
         userDTO.setPassword("password123");
         userDTO.setConfirmPassword("password123");
 
         when(encoder.encode(userDTO.getPassword())).thenReturn("hashed_password");
 
         // ACT
-        UserDTO response = userService.storeUser(userDTO);
+        ApiResponse response = userService.store(userDTO);
 
         // VERIFIES THAT THE PASSWORD GOT ENCRYPTED
         verify(encoder, times(1)).encode(userDTO.getPassword());
@@ -96,6 +97,6 @@ public class UserRegistrationTest {
 
         // ASSERT
         assertEquals("hashed_password", savedUser.getPassword());
-        assertEquals("Successfully Created", response.getResponse());
+        assertEquals("Account Successfully Created", response.message());
     }
 }

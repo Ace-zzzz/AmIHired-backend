@@ -1,22 +1,21 @@
-package com.casey.aimihired.DTO;
+package com.casey.aimihired.DTO.user;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
-@Setter
+@Getter @Setter
 public class UserDTO {
-    private String response;
-
-    @JsonProperty("user_name")
     @NotBlank(message = "Username is required!")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @Column(unique = true)
     @Size(min = 8, max = 25, message = "Username should be between 8 and 25 characters")
-    private String userName;
+    private String username;
 
     @NotBlank(message = "Password is required!")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
@@ -30,5 +29,7 @@ public class UserDTO {
 
     @Email
     @NotBlank(message = "Email is required!")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @Column(unique = true)
     private String email;
 }

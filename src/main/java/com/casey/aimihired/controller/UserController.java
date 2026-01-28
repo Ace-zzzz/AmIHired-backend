@@ -2,20 +2,21 @@ package com.casey.aimihired.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.casey.aimihired.DTO.ChangePasswordDTO;
-import com.casey.aimihired.DTO.LoginDTO;
-import com.casey.aimihired.DTO.UpdateUserNameDTO;
-import com.casey.aimihired.DTO.UserDTO;
+import com.casey.aimihired.DTO.user.ChangePasswordDTO;
+import com.casey.aimihired.DTO.user.LoginDTO;
+import com.casey.aimihired.DTO.user.UpdateUserNameDTO;
+import com.casey.aimihired.DTO.user.UserDTO;
 import com.casey.aimihired.service.UserService;
+import com.casey.aimihired.util.ApiResponse;
 
 import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.GetMapping;
 
 
 @RestController
@@ -29,42 +30,30 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<UserDTO> registerUser(@Valid @RequestBody UserDTO user) {
-        UserDTO createdUser = service.storeUser(user);
+    public ResponseEntity<ApiResponse> store(@Valid @RequestBody UserDTO user) {
+        ApiResponse userObject = service.store(user);
         
-        return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userObject);
     } 
 
     @PostMapping("/login")
-    public ResponseEntity<LoginDTO> login(@Valid @RequestBody LoginDTO loginDTO) {
-        LoginDTO response = service.login(loginDTO);
+    public ResponseEntity<ApiResponse> login(@Valid @RequestBody LoginDTO loginDTO) {
+        ApiResponse response = service.login(loginDTO);
 
         return ResponseEntity.ok(response);
     }
-    
 
     @PutMapping("/update-password")
-    public ResponseEntity<ChangePasswordDTO> changePassword(@Valid @RequestBody ChangePasswordDTO changePasswordRequest) {
-        Long id = 2L;
-
-        ChangePasswordDTO response = service.changePassword(id, changePasswordRequest);
+    public ResponseEntity<ApiResponse> changePassword(@Valid @RequestBody ChangePasswordDTO changePasswordRequest, Authentication auth) {
+        ApiResponse response = service.changePassword(auth.getName(), changePasswordRequest);
 
         return ResponseEntity.ok(response);
     }
 
     @PutMapping("/update-username")
-    public ResponseEntity<UpdateUserNameDTO> updateUserName(@Valid @RequestBody UpdateUserNameDTO newUsernameRequest) {
-        Long id = 2L;
-        
-        UpdateUserNameDTO response = service.updateUserName(id, newUsernameRequest);
+    public ResponseEntity<ApiResponse> updateUserName(@Valid @RequestBody UpdateUserNameDTO newUsernameRequest, Authentication auth) {
+        ApiResponse response = service.updateUserName(auth.getName(), newUsernameRequest);
 
         return ResponseEntity.ok(response);
     }
-
-    @GetMapping("/try")
-    public String tryLang() {
-        return "JWT WORKS!";
-    }
-    
-
 }

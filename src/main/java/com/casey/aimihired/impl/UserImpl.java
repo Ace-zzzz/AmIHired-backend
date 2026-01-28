@@ -5,15 +5,17 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.casey.aimihired.DTO.ChangePasswordDTO;
-import com.casey.aimihired.DTO.LoginDTO;
-import com.casey.aimihired.DTO.UpdateUserNameDTO;
-import com.casey.aimihired.DTO.UserDTO;
+import com.casey.aimihired.DTO.user.ChangePasswordDTO;
+import com.casey.aimihired.DTO.user.LoginDTO;
+import com.casey.aimihired.DTO.user.UpdateUserNameDTO;
+import com.casey.aimihired.DTO.user.UserDTO;
 import com.casey.aimihired.models.User;
 import com.casey.aimihired.repo.UserRepo;
 import com.casey.aimihired.security.JwtUtils;
 import com.casey.aimihired.service.UserService;
+import com.casey.aimihired.util.ApiResponse;
 
 @Service
 public class UserImpl implements UserService {
@@ -32,61 +34,51 @@ public class UserImpl implements UserService {
 
     // STORE USER TO DB
     @Override
-    public UserDTO storeUser(UserDTO user) {
+    @Transactional
+    public ApiResponse store(UserDTO user) {
         if (!user.getPassword().equals(user.getConfirmPassword())) {
             throw new IllegalArgumentException("Passwords do not match!");
         }
 
         User entity = new User();
-        UserDTO response = new UserDTO();
 
         // HASH PASSWORD
         String hashedPassword = encoder.encode(user.getPassword());
 
         // SET USER FIELDS
         entity.setEmail(user.getEmail().trim());
-        entity.setUserName(user.getUserName().trim());
+        entity.setUsername(user.getUsername().trim());
         entity.setPassword(hashedPassword);
         
         // SAVE
         repo.save(entity);
 
-        // CREATE JSON RESPONSE
-        response.setEmail(entity.getEmail());
-        response.setUserName(entity.getUserName());
-        response.setResponse("Successfully Created");
-
-        return response;
+        return new ApiResponse("Account Successfully Created", true);
     }
 
     // LOGIN USER
     @Override
-    public LoginDTO login(LoginDTO loginDTO) {
+    public ApiResponse login(LoginDTO loginDTO) {
         /**
          * AUTHENTICATE USER VIA
          * USERNAME AND PASSWORD
          **/ 
         Authentication auth = authManager.authenticate(
-            new UsernamePasswordAuthenticationToken(loginDTO.getUserName(), loginDTO.getPassword())
+            new UsernamePasswordAuthenticationToken(loginDTO.getUsername(), loginDTO.getPassword())
         );
 
         // GENERATES JWT
         String token = jwtUtils.generateToken(auth.getName());
 
-        /**
-         * INSTANTIATE LOGIN 
-         * DTO FOR RESPONSE
-         **/ 
-        LoginDTO response = new LoginDTO(token);
-
-        return response;
+        return new ApiResponse(token, true);
     }
 
     // CHANGE USER PASSWORD
     @Override
-    public ChangePasswordDTO changePassword(Long userId, ChangePasswordDTO changePasswordRequest) {
+    @Transactional
+    public ApiResponse changePassword(String username, ChangePasswordDTO changePasswordRequest) {
         // FETCH USER FROM DB
-        User user = repo.findById(userId).orElseThrow(
+        User user = repo.findByUsername(username).orElseThrow(
             () -> new IllegalArgumentException("User not found")
         );
 
@@ -102,27 +94,22 @@ public class UserImpl implements UserService {
 
         // UPDATE THE PASSWORD
         user.setPassword(encoder.encode(changePasswordRequest.getNewPassword()));
-        repo.save(user);
         
-        ChangePasswordDTO response = new ChangePasswordDTO("Successfully Changed Password");
-
-        return response;
+        return new ApiResponse("Successfully Changed Password", true);
     }
 
     // UPDATE USERNAME
     @Override
-    public UpdateUserNameDTO updateUserName(Long userId, UpdateUserNameDTO newUsernameRequest) {
+    @Transactional
+    public ApiResponse updateUserName(String username, UpdateUserNameDTO newUsernameRequest) {
         // FETCH USER FROM DB
-        User user = repo.findById(userId).orElseThrow(
+        User user = repo.findByUsername(username).orElseThrow(
             () -> new IllegalArgumentException("User not found")
         );
 
         // UPDATE USERNAME
-        user.setUserName(newUsernameRequest.getUserName().trim());
-        repo.save(user);
+        user.setUsername(newUsernameRequest.getUsername().trim());
         
-        UpdateUserNameDTO response = new UpdateUserNameDTO("Successfully updated Username");
-
-        return response;
+        return new ApiResponse("Successfully updated Username", true);
     }
 }
