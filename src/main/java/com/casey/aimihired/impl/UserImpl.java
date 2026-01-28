@@ -53,7 +53,7 @@ public class UserImpl implements UserService {
         // SAVE
         repo.save(entity);
 
-        return new ApiResponse("Successfully Register", true);
+        return new ApiResponse("Account Successfully Created", true);
     }
 
     // LOGIN USER
@@ -76,9 +76,9 @@ public class UserImpl implements UserService {
     // CHANGE USER PASSWORD
     @Override
     @Transactional
-    public ApiResponse changePassword(Long userId, ChangePasswordDTO changePasswordRequest) {
+    public ApiResponse changePassword(String username, ChangePasswordDTO changePasswordRequest) {
         // FETCH USER FROM DB
-        User user = repo.findById(userId).orElseThrow(
+        User user = repo.findByUsername(username).orElseThrow(
             () -> new IllegalArgumentException("User not found")
         );
 
@@ -101,9 +101,9 @@ public class UserImpl implements UserService {
     // UPDATE USERNAME
     @Override
     @Transactional
-    public ApiResponse updateUserName(Long userId, UpdateUserNameDTO newUsernameRequest) {
+    public ApiResponse updateUserName(String username, UpdateUserNameDTO newUsernameRequest) {
         // FETCH USER FROM DB
-        User user = repo.findById(userId).orElseThrow(
+        User user = repo.findByUsername(username).orElseThrow(
             () -> new IllegalArgumentException("User not found")
         );
 

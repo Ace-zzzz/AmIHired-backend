@@ -50,6 +50,7 @@ public class JobTest {
         dto.setStatus("pending");
         dto.setJobURL("www.youtube.com");
         dto.setJobType("FULL TIME");
+        dto.setBenefits("test benefits");
 
         User user = new User();
         user.setId(1L);
@@ -79,6 +80,7 @@ public class JobTest {
 
         // ASSERT
         assertEquals("Successfully created", response.message());
+        assertEquals("test benefits", dto.getBenefits());
     }
 
     @Test
@@ -97,15 +99,16 @@ public class JobTest {
     @Test
     void getSingleJob_shouldReturnJob_ifJobExist() {
         // ARRANGE
-        Long id = 1L;
+        long id = 1L;
         
-        Job entity = new Job();
+        Fulltime entity = new Fulltime();
         entity.setId(id);
         entity.setPosition("testPosition");
         entity.setCompany("testCompany");
         entity.setWorkModel("testWorkModel");
-        entity.setStatus("testStatys");
+        entity.setStatus("testStatus");
         entity.setJobURL("testJobURL");
+        entity.setBenefits("testBenefits");
 
         /**
          * MOCK REPOSITORY CALL 
@@ -134,7 +137,7 @@ public class JobTest {
     @Test
     void getSingleJob_shouldThrowException_ifJobDidNotExist() {
         // ARRANGE
-        Long wrongId = 404L;
+        long wrongId = 404L;
         
         // ACT
         IllegalArgumentException exception = assertThrows(
@@ -156,7 +159,7 @@ public class JobTest {
     @Test
     void updateJob_shouldThrowException_ifJobDidNotExist() {
         // ARRANGE
-        Long wrongId = 404L;
+        long wrongId = 404L;
         
         JobDTO dto = new JobDTO();
         dto.setCompany("test Company");
@@ -183,9 +186,9 @@ public class JobTest {
     }
 
     @Test
-    void updateJob_shouldThrowSuccessMessage_ifJobExistAndNoProblem() {
+    void updateJob_shouldReturnSuccessMessage_ifJobExistAndNoProblem() {
         // ARRANGE
-        Long id = 1L;
+        long id = 1L;
         
         JobDTO dto = new JobDTO();
         dto.setCompany("test Company");
@@ -229,7 +232,7 @@ public class JobTest {
     @Test
     void deleteJob_shouldThrowException_ifJobDidNotExist() {
         // ARRANGE
-        Long wrongId = 404L;
+        long wrongId = 404L;
         
         JobDTO dto = new JobDTO();
         dto.setCompany("test Company");
@@ -256,9 +259,9 @@ public class JobTest {
     }
 
     @Test
-    void deleteJob_shouldThrowSuccessMessage_ifJobExistAndNoProblem() {
+    void deleteJob_shouldReturnSuccessMessage_ifJobExistAndNoProblem() {
         // ARRANGE
-        Long id = 1L;
+        long id = 1L;
         
         Job job = new Job();
         job.setId(id);

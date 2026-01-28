@@ -33,7 +33,7 @@ import lombok.Setter;
 public class Job {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
@@ -64,7 +64,7 @@ public class Job {
     private String status;
 
     @JsonProperty(value = "job_url", access = JsonProperty.Access.WRITE_ONLY)
-    @Column(name = "job_URL")
+    @Column(name = "job_url")
     private String jobURL;
 
     @CreationTimestamp

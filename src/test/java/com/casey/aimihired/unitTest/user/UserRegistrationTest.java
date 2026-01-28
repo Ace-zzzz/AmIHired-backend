@@ -97,6 +97,6 @@ public class UserRegistrationTest {
 
         // ASSERT
         assertEquals("hashed_password", savedUser.getPassword());
-        assertEquals("Successfully Register", response.message());
+        assertEquals("Account Successfully Created", response.message());
     }
 }

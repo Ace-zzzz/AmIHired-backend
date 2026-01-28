@@ -136,18 +136,18 @@ public class JobImpl implements JobService{
         if (job instanceof Fulltime fulltime) {
             dtoBuilder.jobType("FULL TIME")
                       .benefits(fulltime.getBenefits());
-        }
-
-        if (job instanceof PartTime partTime) {
+        } 
+        else if (job instanceof PartTime partTime) {
             dtoBuilder.jobType("PART TIME")
                       .shiftSchedule(partTime.getShiftSchedule());
         }
-
-        if (job instanceof Internship internship) {
+        else if (job instanceof Internship internship) {
             dtoBuilder.jobType("INTERNSHIP")
                       .hourRequired(internship.getHourRequired())
                       .isPaid(internship.getIsPaid());
         }
+        else
+            throw new IllegalArgumentException("Job type is unknown");
 
         return dtoBuilder.build();
     }
@@ -190,7 +190,7 @@ public class JobImpl implements JobService{
             }
         
             default -> throw new IllegalArgumentException(
-                "Unknow Job type " + dto.getJobType()
+                "Unknown Job type " + dto.getJobType()
             );
         };
     }

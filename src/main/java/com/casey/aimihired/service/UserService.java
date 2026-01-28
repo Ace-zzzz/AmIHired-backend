@@ -8,7 +8,7 @@ import com.casey.aimihired.util.ApiResponse;
 
 public interface UserService {
     public ApiResponse store(UserDTO user); 
-    public ApiResponse changePassword(Long userId, ChangePasswordDTO changePasswordRequest);
-    public ApiResponse updateUserName(Long userId, UpdateUserNameDTO newUsernameRequest);
+    public ApiResponse changePassword(String username, ChangePasswordDTO changePasswordRequest);
+    public ApiResponse updateUserName(String username, UpdateUserNameDTO newUsernameRequest);
     public ApiResponse login(LoginDTO loginDTO);
 }

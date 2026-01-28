@@ -2,6 +2,7 @@ package com.casey.aimihired.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -43,19 +44,15 @@ public class UserController {
     }
 
     @PutMapping("/update-password")
-    public ResponseEntity<ApiResponse> changePassword(@Valid @RequestBody ChangePasswordDTO changePasswordRequest) {
-        Long id = 2L;
-
-        ApiResponse response = service.changePassword(id, changePasswordRequest);
+    public ResponseEntity<ApiResponse> changePassword(@Valid @RequestBody ChangePasswordDTO changePasswordRequest, Authentication auth) {
+        ApiResponse response = service.changePassword(auth.getName(), changePasswordRequest);
 
         return ResponseEntity.ok(response);
     }
 
     @PutMapping("/update-username")
-    public ResponseEntity<ApiResponse> updateUserName(@Valid @RequestBody UpdateUserNameDTO newUsernameRequest) {
-        Long id = 2L;
-        
-        ApiResponse response = service.updateUserName(id, newUsernameRequest);
+    public ResponseEntity<ApiResponse> updateUserName(@Valid @RequestBody UpdateUserNameDTO newUsernameRequest, Authentication auth) {
+        ApiResponse response = service.updateUserName(auth.getName(), newUsernameRequest);
 
         return ResponseEntity.ok(response);
     }

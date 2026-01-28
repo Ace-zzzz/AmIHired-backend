@@ -1,5 +1,7 @@
 package com.casey.aimihired.models.Job_application;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
@@ -13,9 +15,10 @@ import lombok.Setter;
 @Getter @Setter
 @Table(name = "fulltime")
 @DiscriminatorValue("FULL TIME")
-public class Fulltime extends Job{
+public class Fulltime extends Job {
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column(length = 50, nullable = false) 
-    @NotBlank(message = "Benefits is required!")
+    @NotBlank(message = "Benefits are required!")
     @Size(min = 2,  max = 50, message = "Benefits should be between 2 and 50 characters")
     private String benefits;
 }
